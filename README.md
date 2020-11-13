@@ -37,31 +37,31 @@ Crypto Enthusiast (~ 30yo) - Curious Investor (~ 45yo) - Crypto Newbie (~ 20yo)
 
 ### Anonymous user
 
-Real-time market data
-Latest news about crypto currencies
+- Real-time market data
+- Latest news about crypto currencies
 
 ### Authenticated user 
 
-Real-time market data
-Choose your market data preferences
-Latest news about crypto currencies 
-Enable users to browse from various news categories (keywords)
-User can manage and save his preferences 
+- Real-time market data
+- Choose your market data preferences
+- Latest news about crypto currencies 
+- Enable users to browse from various news categories (keywords)
+- User can manage and save his preferences 
 
 ### Admin 
 
-Can define the global market data preferences for all users
-Can config the RSS feed for the news
+- Can define the global market data preferences for all users
+- Can config the RSS feed for the news
 
 ## Characteristics / Features 
 
-Real-time crypto currency market data (high priority)
-Crypto currency news feed (high priority)
-User authentication
-Authenticated User preferences panel
-Admin panel
-Great UX/UI - User Friendly 
-Fully responsive
+- Real-time crypto currency market data (high priority)
+- Crypto currency news feed (high priority)
+- User authentication
+- Authenticated User preferences panel
+- Admin panel
+- Great UX/UI - User Friendly
+- Fully responsive
 
 # Web Application Architecture
 
@@ -71,7 +71,7 @@ Rest API build with Node JS + Express + LoopBack + Mongoose
 
 ## Front End
 
-Stack: React JS + ReactDOM + React Router + Axios 
+Stack: React JS + ReactDOM + React Router + Axios
 
 ### Dynamic UI interface with React
 
@@ -83,7 +83,7 @@ Our philosophy is to keep the state local as possible and use react context only
 
 ### Single Page Application (SPA)
 
-A single page application interacts with the user though a single page that is dynamically updated with new data from the web server instead of visiting a new brand page in the browser. We use React Router as a third party library to navigate though the different page component of our application without leaving the current page of the browser. 
+A single page application interacts with the user though a single page that is dynamically updated with new data from the web server instead of visiting a new brand page in the browser. We use React Router as a third party library to navigate though the different page component of our application without leaving the current page of the browser.
 
 https://reactrouter.com/
 
