@@ -12,7 +12,7 @@ docker-compose build
 docker-compose up
 ```
 
-api should be running in port 5000 and client should be running on port 3000
+api should be running on port 5000 and client should be running on port 3000
 
 ### Work in development
 
