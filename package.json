@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/younessbennaj/the-count-of-money/issues"
   },
-  "homepage": "https://github.com/younessbennaj/the-count-of-money#readme"
+  "homepage": "https://github.com/younessbennaj/the-count-of-money#readme",
+  "devDependencies": {
+    "express": "^4.17.1"
+  }
 }
