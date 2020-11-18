@@ -1,8 +1,10 @@
 # The Count of Money
 
-#Documentation 
+# Documentation 
 
-##Run with docker compose 
+## Get started
+
+### Run with docker compose
 
 ```
 cd the-count-of-money/
@@ -12,18 +14,16 @@ docker-compose up
 
 api should be running in port 5000 and client should be running on port 3000
 
-##Work in development
+### Work in development
 
-###Get started with API 
-
-####Run API in development env 
+#### Run API in development env 
 
 ```
 cd the-count-of-money/
 cd api/
 npm run serve
 ```
-####Run the API with Docker 
+#### Run the API with Docker 
 
 Find the api/ folder
 
@@ -54,9 +54,7 @@ curl -i localhost:5000
 Hello World
 ```
 
-###Get started with Client 
-
-####Run API in development env 
+#### Run API in development env 
 
 ```
 cd the-count-of-money/
@@ -64,7 +62,7 @@ cd client/
 npm run start
 ```
 
-####Run the Client with Docker 
+#### Run the Client with Docker 
 
 Find the api/ folder
 
@@ -154,9 +152,30 @@ Crypto Enthusiast (~ 30yo) - Curious Investor (~ 45yo) - Crypto Newbie (~ 20yo)
 
 # Web Application Architecture
 
+To build this application we’ll use the MERN Stack (MongoDB, Express, React JS, NodeJS). 
+
 ## Back End
 
-Rest API build with Node JS + Express + LoopBack + Mongoose 
+1- RESTful API build with Node JS + Express + Mongoose 
+
+2 - NoSQL Database using MongoDB
+
+NodeJS:  JavaScript runtime that allows us to use JavaScript outside of browser to build server. 
+
+Express: NodeJS framework that allows us to build Restful API in more efficiently way.
+
+MongoDB: MongoDB NoSQL databases are based on document instead of table. Data are thought in terms of objects instead of rows and columns.
+
+Mongoose: package to work with MongoDB in NodeJS app. 
+
+### Token-Based authentication
+
+In this project we implement a token based authentication with simple JSON Web Token. The core concept it that the client send credentials to the server, the server validates those credentials and sends a signed JWT to the client. This token contains the user information.  
+In each requests send to the server, we will add the token and the server will decode it. The token will be stored at client side, in the local storage. 
+
+### SSO authentication 
+
+It’s an authentication method that allow us to validate a user using an identify provider like Facebook, Google or Twitter. To do this we use Passport JS that is an authentication middleware for Node JS application.
 
 ## Front End
 
@@ -168,7 +187,7 @@ React lets us build a web application using elementary components bricks. Each c
 
 ### State Management
 
-Our philosophy is to keep the state local as possible and use react context only when props drilling become a problem and we 
+Our philosophy is to keep the state local as possible and use react context only when props drilling become a problem and we need global data like authenticated user or local preferences. 
 
 ### Single Page Application (SPA)
 
@@ -176,7 +195,7 @@ A single page application interacts with the user though a single page that is d
 
 https://reactrouter.com/
 
-## Data Base 
+## DevOps 
 
-MongoDB
+Our application is build with a combination of different technologies and services. In our case we use a MERN stack composed of Node JS Express React and MongoDB. For development purposes, we need to setup and configure those services.   But our application need to be run on different execution contexte. Indeed, different developers that collaborate work on different computer and use different OS, also the app can be run in a testing environnement or in a production server. It’s very painful to configure manually the environnement each time we need to run the application. Therefore, to prevent this issue, we need to ensure that the application will run in an identical and isolated execution environment. As a result, we’ll use Docker Container to do that.   Docker containers allow us to put our application and its dependencies inside of an isolated execution context that virtualize partially the OS host. This solution is most efficient and cost less ressources than Virtual Machine solution. 
 
