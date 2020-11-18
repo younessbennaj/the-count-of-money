@@ -22,6 +22,12 @@ Run the Docker image and redirect the port
 ```
 docker run -p 5000:5000 -d <your username>/the-count-of-money-api
 ```
+
+Test the api 
+
+```
+curl -i localhost:5000
+```
 #Product Canvas 
 
 ## Team
