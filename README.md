@@ -2,16 +2,28 @@
 
 #Documentation 
 
-##Get started with API 
+##Run with docker compose 
 
-###Run API in development env 
+```
+cd the-count-of-money/
+docker-compose build
+docker-compose up
+```
+
+api should be running in port 5000 and client should be running on port 3000
+
+##Work in development
+
+###Get started with API 
+
+####Run API in development env 
 
 ```
 cd the-count-of-money/
 cd api/
 npm run serve
 ```
-###Run the API with Docker 
+####Run the API with Docker 
 
 Find the api/ folder
 
@@ -42,9 +54,9 @@ curl -i localhost:5000
 Hello World
 ```
 
-##Get started with Client 
+###Get started with Client 
 
-###Run API in development env 
+####Run API in development env 
 
 ```
 cd the-count-of-money/
@@ -52,7 +64,7 @@ cd client/
 npm run start
 ```
 
-###Run the Client with Docker 
+####Run the Client with Docker 
 
 Find the api/ folder
 

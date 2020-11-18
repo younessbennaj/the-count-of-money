@@ -1,10 +1,14 @@
 var express = require('express')
+var cors = require("cors");
 var app = express()
+
+app.use(cors());
 
 //Middleware that parse request with JSON payloads
 app.use(express.json());
 //For parsing application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }))
+
 
 app.get('/', (req, res) => {
     res.send('Hello World');
