@@ -29,7 +29,7 @@ docker build -t <your username>/the-count-of-money-api .
 Run the Docker image and redirect the port
 
 ```
-docker run -p 5000:5000 -d <your username>/the-count-of-money-api
+docker run --name the-count-of-money-api -p 5000:5000 -d <your username>/the-count-of-money-api
 ```
 
 Test the api 
@@ -52,7 +52,28 @@ cd client/
 npm run start
 ```
 
+###Run the Client with Docker 
 
+Find the api/ folder
+
+```
+cd the-count-of-money/
+cd client/
+```
+
+Build the Docker image 
+
+```
+docker build -t <your username>/the-count-of-money-client .
+```
+
+Run the Docker image and redirect the port
+
+```
+docker run --name the-count-of-money-client -p 3000:3000 -d <your username>/the-count-of-money-client
+```
+
+You navigate go to localhost:3000 
 
 #Product Canvas 
 

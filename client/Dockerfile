@@ -1,8 +1,7 @@
-# Docker container => run application in an identical isolated exection context on different machine
-FROM node:12
+FROM node:10
 
 # Create app directory => container has is own file system virtualized from the OS host
-WORKDIR /usr/src/app/api
+WORKDIR /usr/src/app/client
 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
@@ -15,6 +14,6 @@ RUN npm install
 COPY . .
 
 # since our app is running on port 3000 we need to use the EXPOSE instruction to have it mapped by the docker daemon
-EXPOSE 5000
+EXPOSE 3000
 
-CMD [ "node", "server.js" ]
+CMD [ "npm", "start" ]
