@@ -1,0 +1,28 @@
+{
+  "name": "the-count-of-money",
+  "version": "1.0.0",
+  "description": "Thanks to « The Count Of Money » web application you can track crypto currencies",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "serve": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/younessbennaj/the-count-of-money.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/younessbennaj/the-count-of-money/issues"
+  },
+  "homepage": "https://github.com/younessbennaj/the-count-of-money#readme",
+  "devDependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.6"
+  },
+  "dependencies": {
+    "cors": "^2.8.5"
+  }
+}

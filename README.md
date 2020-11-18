@@ -1,5 +1,94 @@
 # The Count of Money
 
+#Documentation 
+
+##Run with docker compose 
+
+```
+cd the-count-of-money/
+docker-compose build
+docker-compose up
+```
+
+api should be running in port 5000 and client should be running on port 3000
+
+##Work in development
+
+###Get started with API 
+
+####Run API in development env 
+
+```
+cd the-count-of-money/
+cd api/
+npm run serve
+```
+####Run the API with Docker 
+
+Find the api/ folder
+
+```
+cd the-count-of-money/
+cd api/
+```
+
+Build the Docker image 
+
+```
+docker build -t <your username>/the-count-of-money-api .
+```
+
+Run the Docker image and redirect the port
+
+```
+docker run --name the-count-of-money-api -p 5000:5000 -d <your username>/the-count-of-money-api
+```
+
+Test the api 
+
+```
+curl -i localhost:5000
+
+# Should print 
+
+Hello World
+```
+
+###Get started with Client 
+
+####Run API in development env 
+
+```
+cd the-count-of-money/
+cd client/
+npm run start
+```
+
+####Run the Client with Docker 
+
+Find the api/ folder
+
+```
+cd the-count-of-money/
+cd client/
+```
+
+Build the Docker image 
+
+```
+docker build -t <your username>/the-count-of-money-client .
+```
+
+Run the Docker image and redirect the port
+
+```
+docker run --name the-count-of-money-client -p 3000:3000 -d <your username>/the-count-of-money-client
+```
+
+You navigate go to localhost:3000 
+
+#Product Canvas 
+
 ## Team
 
 ### Back
