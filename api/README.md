@@ -2,7 +2,16 @@
 
 #Documentation 
 
-##Run the API with Docker 
+##Get started with API 
+
+###Run API in development env 
+
+```
+cd the-count-of-money/
+cd api/
+npm run serve
+```
+###Run the API with Docker 
 
 Find the api/ folder
 
@@ -27,7 +36,24 @@ Test the api
 
 ```
 curl -i localhost:5000
+
+# Should print 
+
+Hello World
 ```
+
+##Get started with Client 
+
+###Run API in development env 
+
+```
+cd the-count-of-money/
+cd client/
+npm run start
+```
+
+
+
 #Product Canvas 
 
 ## Team
