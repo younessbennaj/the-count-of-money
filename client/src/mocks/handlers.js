@@ -1,11 +1,11 @@
 import { rest } from 'msw';
 
 export const handlers = [
-    rest.post('/login', (req, res, ctx) => {
-        // Persist user's authentication in the session
-        sessionStorage.setItem('is-authenticated', true)
+    //Fake route to authenticate the user
+    rest.post('/api/users/register', (req, res, ctx) => {
         return res(
             // Respond with a 200 status code
+            ctx.json({ token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG5kb2UiLCJlbWFpbCI6ImpvaG5kb2VAZW1haWwuY29tIn0.BSCkIEqh_8F1ru0UHq1e6gn6ZGfkorjZ-ZljU-YziOU" }),
             ctx.status(200),
         )
     }),
