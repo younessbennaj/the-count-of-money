@@ -1,26 +1,108 @@
 import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
-import './App.css';
 import axios from "axios";
 
+//React Router 
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+
+//Layout HOC
+import { withLayout } from "./hoc/Layout";
+
+//Import containers 
+import Dashboard from "./containers/Dashboard";
+
+//Import components
+import Navbar from "./components/Navbar";
+
 function App() {
+
+  //Return page component with identical layout
+  const DashboardWithLayout = withLayout(Dashboard);
+
   const [message, setMessage] = useState("");
+
   useEffect(() => {
-    axios.get('http://localhost:5000/api')
+    //with the real API
+    // axios.get('http://localhost:5000/api')
+    //   .then(response => {
+    //     console.log(response.data);
+    //     setMessage(response.data.message)
+    //   })
+
+    //With MSWJS actived
+    axios.get('/hello')
       .then(response => {
         console.log(response.data);
         setMessage(response.data.message)
       })
   }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          {message}
-        </p>
-      </header>
-    </div>
+    <Router>
+      <div>
+        <Navbar />
+
+        {/* Dashboard Route */}
+        <Route path="/" exact>
+          <DashboardWithLayout title="Dashboard" />
+        </Route>
+
+        {/* Articles Route */}
+        <Route path="/articles" exact>
+          <header className="bg-white shadow">
+            <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+              <h1 className="text-3xl font-bold leading-tight text-gray-900">
+                News
+              </h1>
+            </div>
+          </header>
+          <main>
+            <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+              <div className="px-4 py-6 sm:px-0">
+                <div className="border-4 border-dashed border-gray-200 rounded-lg h-96">
+                  <h1>New content here</h1>
+                </div>
+              </div>
+            </div>
+          </main>
+        </Route>
+
+        {/* Profile Route */}
+        <Route path="/profile" exact>
+          <header className="bg-white shadow">
+            <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+              <h1 className="text-3xl font-bold leading-tight text-gray-900">
+                Profile
+              </h1>
+            </div>
+          </header>
+          <main>
+            <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+              <div className="px-4 py-6 sm:px-0">
+                <div className="border-4 border-dashed border-gray-200 rounded-lg h-96"></div>
+              </div>
+            </div>
+          </main>
+        </Route>
+        {/* <header className="bg-white shadow">
+          <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <h1 className="text-3xl font-bold leading-tight text-gray-900">
+              Dashboard
+      </h1>
+          </div>
+        </header>
+        <main>
+          <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            <div className="px-4 py-6 sm:px-0">
+              <div className="border-4 border-dashed border-gray-200 rounded-lg h-96"></div>
+            </div>
+          </div>
+        </main> */}
+      </div>
+    </Router>
   );
 }
 
