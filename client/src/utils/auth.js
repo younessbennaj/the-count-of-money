@@ -15,7 +15,9 @@ export const loginUser = credentials => {
 
     axios(config)
         .then(function (response) {
-            console.log(JSON.stringify(response.data));
+            // console.log(JSON.stringify(response.data));
+            // console.log(response.data.token);
+            sessionStorage.setItem('auth-token', response.data.token);
         })
         .catch(function (error) {
             console.log(error);
