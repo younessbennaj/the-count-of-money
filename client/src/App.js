@@ -14,6 +14,8 @@ import { withLayout } from "./hoc/Layout";
 
 //Import containers 
 import Dashboard from "./containers/Dashboard";
+import News from "./containers/News";
+import Article from "./containers/Article";
 
 //Import components
 import Navbar from "./components/Navbar";
@@ -22,6 +24,8 @@ function App() {
 
   //Return page component with identical layout
   const DashboardWithLayout = withLayout(Dashboard);
+  const NewsWithLayout = withLayout(News);
+  const ArticleWithLayout = withLayout(Article);
 
   const [message, setMessage] = useState("");
 
@@ -52,22 +56,12 @@ function App() {
 
         {/* Articles Route */}
         <Route path="/articles" exact>
-          <header className="bg-white shadow">
-            <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-              <h1 className="text-3xl font-bold leading-tight text-gray-900">
-                News
-              </h1>
-            </div>
-          </header>
-          <main>
-            <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-              <div className="px-4 py-6 sm:px-0">
-                <div className="border-4 border-dashed border-gray-200 rounded-lg h-96">
-                  <h1>New content here</h1>
-                </div>
-              </div>
-            </div>
-          </main>
+          <NewsWithLayout title="News" />
+        </Route>
+
+        {/* Article Route */}
+        <Route path="/article" exact>
+          <ArticleWithLayout title="Article" backTo="/articles"/>
         </Route>
 
         {/* Profile Route */}

@@ -2,8 +2,21 @@
 //reusable logic 
 //=> in our case we need that main page component should be wrapped by a default layout 
 import React, { Component } from 'react';
+import {Link} from "react-router-dom";
 
 export const withLayout = (Wrapped) => {
+
+    function BackArrow(props) {
+        const backTo = props.backTo;
+        if (backTo) {    
+            return (
+                <Link to={backTo}>
+                        {"<  "}
+                </Link>
+            );  
+        }  
+        return null;
+    }
 
     return class Layout extends Component {
         constructor(props) {
@@ -12,12 +25,14 @@ export const withLayout = (Wrapped) => {
             //now we can use this
             this.props = props;
         }
+
         render() {
             return (
                 <>
                     <header className="bg-white shadow">
                         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                             <h1 className="text-3xl font-bold leading-tight text-gray-900">
+                                <BackArrow backTo={this.props.backTo} />
                                 {this.props.title}
                             </h1>
                         </div>
@@ -25,7 +40,7 @@ export const withLayout = (Wrapped) => {
                     <main>
                         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
                             <div className="px-4 py-6 sm:px-0">
-                                <div className="border-4 border-dashed border-gray-200 rounded-lg h-96">
+                                <div className="border-2 border-dashed border-gray-200 rounded-lg h-96">
                                     <Wrapped />
                                 </div>
                             </div>
