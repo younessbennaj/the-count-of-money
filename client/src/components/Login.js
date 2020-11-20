@@ -1,5 +1,3 @@
-import React, { useEffect } from 'react';
-
 //React Router 
 import {
     useRouteMatch
@@ -17,7 +15,7 @@ import { AuthenticationSchema } from "../utils/schemas";
 
 const Login = () => {
 
-    let { path, url } = useRouteMatch();
+    let { path } = useRouteMatch();
 
     return (
         <div className="max-w-md w-full space-y-8">

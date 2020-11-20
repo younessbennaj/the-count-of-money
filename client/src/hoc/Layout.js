@@ -6,10 +6,6 @@ import React, { Component } from 'react';
 export function withLayout(Wrapped) {
 
     return class extends Component {
-        constructor(props) {
-            //props passed to the parent class Component()
-            super(props);
-        }
         render() {
             return (
                 <>

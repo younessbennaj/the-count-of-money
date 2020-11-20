@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import axios from "axios";
+import React, { useEffect } from 'react';
 
 //React Router 
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link
+  Route
 } from "react-router-dom";
 
 //Layout HOC
@@ -25,8 +23,6 @@ function App() {
   const DashboardWithLayout = withLayout(Dashboard);
 
   const AuthenticationWithLayout = withLayout(Authentication);
-
-  const [message, setMessage] = useState("");
 
   useEffect(() => {
     //with the real API
