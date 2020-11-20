@@ -11,7 +11,8 @@ import { logoutUser } from "../utils/auth";
 
 const Navbar = () => {
 
-    function logout() {
+    function logout(e) {
+        e.preventDefault();
         logoutUser();
     }
 
@@ -59,7 +60,7 @@ const Navbar = () => {
 
                                     <Link to="/authentication/login" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Login</Link>
 
-                                    <a onClick={logout} href="/#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Sign out</a>
+                                    <a onClick={(e) => logout(e)} href="/#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Sign out</a>
                                 </div>
                             </div>
                         </div>
