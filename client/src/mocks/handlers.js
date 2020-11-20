@@ -9,6 +9,13 @@ export const handlers = [
             ctx.status(200),
         )
     }),
+    rest.post('/users/login', (req, res, ctx) => {
+        return res(
+            // Respond with a 200 status code
+            ctx.json({ token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG5kb2UiLCJlbWFpbCI6ImpvaG5kb2VAZW1haWwuY29tIn0.BSCkIEqh_8F1ru0UHq1e6gn6ZGfkorjZ-ZljU-YziOU" }),
+            ctx.status(200),
+        )
+    }),
     rest.get('/user', (req, res, ctx) => {
         // Check if the user is authenticated in this session
         const isAuthenticated = sessionStorage.getItem('is-authenticated')
