@@ -4,7 +4,7 @@
 import React, { Component } from 'react';
 import {Link} from "react-router-dom";
 
-export const withLayout = (Wrapped) => {
+export function withLayout(Wrapped) {
 
     function BackArrow(props) {
         const backTo = props.backTo;
@@ -18,14 +18,7 @@ export const withLayout = (Wrapped) => {
         return null;
     }
 
-    return class Layout extends Component {
-        constructor(props) {
-            //props passed to the parent class Component()
-            super(props);
-            //now we can use this
-            this.props = props;
-        }
-
+    return class extends Component {
         render() {
             return (
                 <>
