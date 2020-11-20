@@ -1,28 +1,28 @@
 {
   "name": "the-count-of-money",
   "version": "1.0.0",
-  "description": "Thanks to « The Count Of Money » web application you can track crypto currencies",
+  "description": "Thanks to « The Count Of Money » web application you can track crypto currencies",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "serve": "nodemon server.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/younessbennaj/the-count-of-money.git"
-  },
-  "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/younessbennaj/the-count-of-money/issues"
-  },
-  "homepage": "https://github.com/younessbennaj/the-count-of-money#readme",
-  "devDependencies": {
-    "express": "^4.17.1",
-    "nodemon": "^2.0.6"
-  },
   "dependencies": {
-    "cors": "^2.8.5"
+    "bcrypt": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "ejs": "^3.1.3",
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^3.5.9",
+    "multer": "^1.4.2",
+    "multer-gridfs-storage": "^4.2.0",
+    "swagger-jsdoc": "^4.0.0",
+    "swagger-ui-express": "^4.1.4"
+  },
+  "devDependencies": {
+    "jsdoc": "^3.6.5"
   }
 }
