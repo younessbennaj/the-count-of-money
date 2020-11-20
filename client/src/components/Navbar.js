@@ -1,17 +1,20 @@
 import React from 'react';
 
+
+//React router 
 import {
     BrowserRouter as Router,
-    Switch,
     Route,
     Link
 } from "react-router-dom";
 
+//Utils
+import { logoutUser } from "../utils/auth";
+
 const Navbar = () => {
 
     function logout() {
-        // e.preventDefault();
-        alert('logout !')
+        logoutUser();
     }
 
     return (

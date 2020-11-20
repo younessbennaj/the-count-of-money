@@ -23,3 +23,9 @@ export const loginUser = credentials => {
             console.log(error);
         });
 }
+
+export function logoutUser() {
+    console.log('user logged out');
+    sessionStorage.removeItem('auth-token');
+}
+
