@@ -3,15 +3,9 @@
 //=> in our case we need that main page component should be wrapped by a default layout 
 import React, { Component } from 'react';
 
-export const withLayout = (Wrapped) => {
+export function withLayout(Wrapped) {
 
-    return class Layout extends Component {
-        constructor(props) {
-            //props passed to the parent class Component()
-            super(props);
-            //now we can use this
-            this.props = props;
-        }
+    return class extends Component {
         render() {
             return (
                 <>
