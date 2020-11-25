@@ -15,6 +15,7 @@ const Profile = () => {
         <div>
             <h2>Profile here</h2>
 
+            {/* Profile Card */}
             {credentials &&
                 <div className="profile-card">
                     <h2>{credentials.username}</h2>
@@ -38,6 +39,42 @@ const Profile = () => {
                         })}
                     </ul>
                 </div>
+            }
+
+            {/* Profile Form */}
+            {credentials &&
+                <form className="profile-form">
+                    <div>
+                        <label htmlFor="username">Username</label>
+                        <input type="text" name="username" id="username" />
+                    </div>
+                    <select name="currency" id="currency">
+                        <option value="EUR">EUR</option>
+                        <option value="USD">USD</option>
+                        <option value="JPY">JPY</option>
+                    </select>
+                    <fieldset>
+                        {credentials.cryptocurrencies.map(crypto => {
+                            return (
+                                <div>
+                                    <input type="checkbox" id={crypto} name={crypto} value={crypto} />
+                                    <label htmlFor={crypto}>{crypto}</label>
+                                </div>
+                            )
+                        })}
+
+                    </fieldset>
+                    <fieldset>
+                        {credentials.cryptocurrencies.map(crypto => {
+                            return (
+                                <div>
+                                    <input type="radio" id={crypto} name="cryptocurrencies" value={crypto} />
+                                    <label htmlFor={crypto}>{crypto}</label>
+                                </div>
+                            )
+                        })}
+                    </fieldset>
+                </form>
             }
         </div>
     );
