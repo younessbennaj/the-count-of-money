@@ -22,6 +22,7 @@ export const handlers = [
             ctx.json({
                 mail: "john.doe@email.com",
                 username: "johndoe",
+                currency: "EUR",
                 cryptocurrencies: [
                     "Bitcoin",
                     "Ethereum",
