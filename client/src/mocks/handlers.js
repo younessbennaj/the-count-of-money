@@ -23,7 +23,7 @@ export const handlers = [
                 mail: "john.doe@email.com",
                 username: "johndoe",
                 currency: "EUR",
-                cryptocurrencies: [
+                listCrypto: [
                     "Bitcoin",
                     "Ethereum",
                     "XRP",
@@ -37,6 +37,13 @@ export const handlers = [
                 ]
 
             })
+        )
+    }),
+    rest.put('/users/profile', (req, res, ctx) => {
+        console.log(req.body);
+        return res(
+            ctx.status(200),
+            ctx.json({ message: "profile updated" })
         )
     }),
     rest.get('/user', (req, res, ctx) => {

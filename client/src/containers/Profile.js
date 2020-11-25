@@ -6,7 +6,7 @@ function reducer(state, action) {
     switch (action.type) {
         //We initlialize our reducer with the value fetched from the user profile
         case 'INITIALIZE':
-            let { cryptocurrencies, tags } = action.payload;
+            let { listCrypto: cryptocurrencies, tags } = action.payload;
             return { ...state, cryptocurrencies, tags };
         case 'ADD_CRYPTOS':
             //Add the value in the cryptocurrencies list
@@ -64,9 +64,10 @@ const Profile = () => {
     useEffect(() => {
         axios.get("/users/profile")
             .then(response => {
-                const { cryptocurrencies, tags } = response.data;
+                const { listCrypto, tags } = response.data;
+                console.log(listCrypto);
                 setCredentials(response.data);
-                dispatch({ type: 'INITIALIZE', payload: { cryptocurrencies, tags } });
+                dispatch({ type: 'INITIALIZE', payload: { listCrypto, tags } });
             })
     }, []);
 
@@ -105,6 +106,22 @@ const Profile = () => {
             tags: state.tags
         }
 
+        var data = JSON.stringify(userCredentials);
+
+        var config = {
+            method: 'put',
+            url: '/users/profile',
+            headers: {
+                'Content-Type': 'application/json',
+                //add JWT in global config header
+            },
+            data: data
+        };
+
+        axios(config)
+            .then(response => {
+                console.log(response.data);
+            })
         console.log(userCredentials);
     }
 
@@ -165,7 +182,7 @@ const Profile = () => {
                                         name={crypto}
                                         value={crypto}
                                         //True, if the crypto value from the admin selection is in the user preferences
-                                        defaultChecked={isUserPreferences(crypto, credentials.cryptocurrencies)}
+                                        defaultChecked={isUserPreferences(crypto, credentials.listCrypto)}
                                     />
                                     <label htmlFor={crypto}>{crypto}</label>
                                 </div>
