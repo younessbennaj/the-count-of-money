@@ -92,6 +92,22 @@ const Profile = () => {
         }
     }
 
+    function handleFormSubmit(e) {
+        e.preventDefault();
+        console.log(state.cryptocurrencies);
+        console.log(state.tags);
+
+        const userCredentials = {
+            mail: credentials.mail,
+            username: credentials.username,
+            currency: credentials.currency,
+            cryptocurrencies: state.cryptocurrencies,
+            tags: state.tags
+        }
+
+        console.log(userCredentials);
+    }
+
     function isUserPreferences(value, preferences) {
         //Check if the value is in the user preferences
         return !!preferences.find(preference => preference === value);
@@ -128,7 +144,7 @@ const Profile = () => {
 
             {/* Profile Form */}
             {credentials &&
-                <form className="profile-form">
+                <form className="profile-form" onSubmit={e => handleFormSubmit(e)}>
                     <div>
                         <label htmlFor="username">Username</label>
                         <input type="text" name="username" id="username" />
@@ -175,6 +191,7 @@ const Profile = () => {
                             )
                         })}
                     </fieldset>
+                    <input type="submit" value="submit" />
                 </form>
             }
         </div>
