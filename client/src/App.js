@@ -13,6 +13,7 @@ import { withLayout } from "./hoc/Layout";
 //Import containers 
 import Dashboard from "./containers/Dashboard";
 import Authentication from "./containers/Authentication";
+import Profile from "./containers/Profile";
 
 //Import components
 import Navbar from "./components/Navbar";
@@ -23,6 +24,8 @@ function App() {
   const DashboardWithLayout = withLayout(Dashboard);
 
   const AuthenticationWithLayout = withLayout(Authentication);
+
+  const ProfileWithLayout = withLayout(Profile);
 
   useEffect(() => {
     //with the real API
@@ -76,20 +79,7 @@ function App() {
 
           {/* Profile Route */}
           <Route path="/profile" exact>
-            <header className="bg-white shadow">
-              <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                <h1 className="text-3xl font-bold leading-tight text-gray-900">
-                  Profile
-              </h1>
-              </div>
-            </header>
-            <main>
-              <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-                <div className="px-4 py-6 sm:px-0">
-                  <div className="border-4 border-dashed border-gray-200 rounded-lg h-96"></div>
-                </div>
-              </div>
-            </main>
+            <ProfileWithLayout title="Profile" />
           </Route>
         </Switch>
       </div>

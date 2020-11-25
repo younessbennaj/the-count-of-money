@@ -16,6 +16,36 @@ export const handlers = [
             ctx.status(200),
         )
     }),
+    rest.get('/users/profile', (req, res, ctx) => {
+        return res(
+            ctx.status(200),
+            ctx.json({
+                mail: "john.doe@email.com",
+                username: "johndoe",
+                cryptocurrencies: [
+                    "Bitcoin",
+                    "Ethereum",
+                    "XRP",
+                    "Tether",
+                    "BitcoinCash",
+                    "Chainlink",
+                    "Litecoin",
+                    "Cardano",
+                    "Polkadot",
+                    "BinanceCoin"
+                ],
+                tags: [
+                    "blockchain",
+                    "crypto",
+                    "cryptocurrency",
+                    "ethereum",
+                    "bitcoin",
+                    "cryptotrading"
+                ]
+
+            })
+        )
+    }),
     rest.get('/user', (req, res, ctx) => {
         // Check if the user is authenticated in this session
         const isAuthenticated = sessionStorage.getItem('is-authenticated')
@@ -95,7 +125,7 @@ export const handlers = [
                         "elapsed": 10,
                         "credit_count": 1
                     }
-                
+
                 }
             ),
         )
