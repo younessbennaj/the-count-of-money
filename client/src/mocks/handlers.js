@@ -28,18 +28,10 @@ export const handlers = [
                     "Ethereum",
                     "XRP",
                     "Tether",
-                    "BitcoinCash",
-                    "Chainlink",
-                    "Litecoin",
-                    "Cardano",
-                    "Polkadot",
-                    "BinanceCoin"
+                    "BitcoinCash"
                 ],
                 tags: [
                     "blockchain",
-                    "crypto",
-                    "cryptocurrency",
-                    "ethereum",
                     "bitcoin",
                     "cryptotrading"
                 ]
