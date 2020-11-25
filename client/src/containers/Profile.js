@@ -14,6 +14,12 @@ function reducer(state, action) {
         case 'REMOVE_CRYPTOS':
             //Remove the value from the cryptocurrencies list
             return { ...state, cryptocurrencies: state.cryptocurrencies.filter(crypto => crypto !== value) };
+        case 'ADD_TAGS':
+            //Add the value in the tags list
+            return { ...state, tags: [...state.tags, value] };
+        case 'REMOVE_TAGS':
+            //Remove the value from the tags list
+            return { ...state, tags: state.tags.filter(tag => tag !== value) };
         default:
             console.log('default');
             return { ...state };
@@ -76,7 +82,14 @@ const Profile = () => {
     }
 
     function handleTagChange(e) {
-        console.log(e.target.value);
+        const { value, checked } = e.target;
+        //If the value isn't already checked (not in the user preferences)
+        if (e.target.checked) {
+            dispatch({ type: 'ADD_TAGS', payload: { value } });
+        } else {
+            //If it's already in the user preferences
+            dispatch({ type: 'REMOVE_TAGS', payload: { value } });
+        }
     }
 
     function isUserPreferences(value, preferences) {
