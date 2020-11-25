@@ -1,14 +1,11 @@
 const mongoClient = require('mongodb').MongoClient;
 // a modifier
-const mongoDbUrl = 'mongodb://127.0.0.1:27017';
+const mongoDbUrl = 'mongodb+srv://epitech:epitech@cluster0.odrob.mongodb.net/countOfMoney?retryWrites=true&w=majority';
 let mongodb;
+
 function connect(callback){
     mongoClient.connect(mongoDbUrl, {useNewUrlParser: true, useUnifiedTopology: true}, (err, db) => {
         mongodb = db.db("countOfMoney")
-        mongodb.createCollection("users", function (err, res) {
-            if (err) throw err;
-            console.log("Collection users ok");
-        });
         callback();
     });
 }
