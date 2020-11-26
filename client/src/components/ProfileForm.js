@@ -1,6 +1,34 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+const UIChips = ({item, defaultChecked}) => {
+    return (
+        <label htmlFor={item} className="chips">
+            <input 
+                type="checkbox"
+                id={item}
+                name={item}
+                value={item}
+                defaultChecked={defaultChecked}
+                className="hidden"
+            />
+            {/* <span>Hello</span> */}
+            <span className="
+                bg-blue-200
+                text-blue-700
+                rounded-full
+                py-1
+                px-4 
+                inline-block
+                sibling-checked:text-gray-50
+                "
+             >
+                {item}
+            </span>
+        </label>
+    )
+}
+
 const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
 
     /* 
@@ -139,18 +167,45 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
         <>
             {credentials &&
                 <form className="profile-form" onSubmit={e => handleFormSubmit(e)}>
-                    <div className="flex">
-                        <label htmlFor="username" class="block text-sm font-medium text-gray-700">Username</label>
-                        <input value={credentials.username} onChange={handleUsernameChange} type="text" name="username" id="username" />
+                    <div className="flex flex-col mt-1 relative rounded-md shadow-sm">
+                        <label 
+                            htmlFor="username" class="block text-sm font-medium text-gray-700 pl-1 pb-1"
+                        >
+                            Username
+                        </label>
+                        <input
+                            value={credentials.username} 
+                            onChange={handleUsernameChange} 
+                            type="text" 
+                            name="username" 
+                            id="username" 
+                            className="
+                                focus:ring-indigo-500 
+                                focus:border-indigo-500 
+                                h-full py-3 pl-2 pr-7 
+                                border-transparent 
+                                bg-transparent 
+                                text-gray-700 
+                                border border-gray-400
+                                sm:text-sm rounded-md"
+                    />
                     </div>
-                    <div className="flex flex-col">
-                        <label htmlFor="currency">Currency</label>
+                    <div className="flex flex-col mt-1 relative rounded-md shadow-sm">
+                        <label  class="block text-sm font-medium text-gray-700 pl-1 pb-1" htmlFor="currency" >Currency</label>
                         <select
                             onChange={e => handleCurrencyChange(e)}
                             name="currency"
                             id="currency"
                             defaultValue={credentials.currency}
-                            className="focus:ring-indigo-500 focus:border-indigo-500 h-full py-0 pl-2 pr-7 border-transparent bg-transparent text-gray-500 sm:text-sm rounded-md"
+                            className="
+                                focus:ring-indigo-500 
+                                focus:border-indigo-500 
+                                h-full py-3 pl-2 pr-4 
+                                border-transparent 
+                                bg-transparent 
+                                text-gray-700 
+                                border border-gray-400
+                                sm:text-sm rounded-md"
                         >
                             {currenciesMock.map(currency => <option key={currency} value={currency} >{currency}</option>)}
                         </select>
@@ -159,17 +214,18 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
                         <legend>Select a crypto</legend>
                         {cryptosOptions.map(crypto => {
                             return (
-                                <div key={crypto}>
-                                    <input
-                                        type="checkbox"
-                                        id={crypto}
-                                        name={crypto}
-                                        value={crypto}
-                                        //True, if the crypto value from the admin selection is in the user preferences
-                                        defaultChecked={isUserPreferences(crypto, credentials.cryptocurrencies)}
-                                    />
-                                    <label htmlFor={crypto}>{crypto}</label>
-                                </div>
+                                <UIChips key={crypto} item={crypto}  defaultChecked={true}/>
+                                // <div key={crypto}>
+                                //     <input
+                                //         type="checkbox"
+                                //         id={crypto}
+                                //         name={crypto}
+                                //         value={crypto}
+                                //         //True, if the crypto value from the admin selection is in the user preferences
+                                //         defaultChecked={isUserPreferences(crypto, credentials.cryptocurrencies)}
+                                //     />
+                                //     <label htmlFor={crypto}>{crypto}</label>
+                                // </div>
                             )
                         })}
 

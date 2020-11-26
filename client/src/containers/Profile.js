@@ -52,7 +52,7 @@ const Profile = () => {
 
     return (
         <div>
-            <h2>Profile here</h2>
+            <h2 className="text-3xl font-bold">Profile here</h2>
             {/* If the user want to update his profile and preferences, then switch to edit mode (=> display ProfileForm) */}
             {!isEditMode ?
                 <ProfileCard
