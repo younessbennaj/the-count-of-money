@@ -38,8 +38,6 @@ function App() {
     //     console.log(response.data);
     //     setMessage(response.data.message)
     //   })
-
-
   }, []);
   return (
     <Router>
@@ -61,14 +59,14 @@ function App() {
           </Route>
 
           {/* Articles Route */}
-        <Route path="/articles" exact>
-          <NewsWithLayout title="News" />
-        </Route>
+          <Route path="/articles" exact>
+            <NewsWithLayout title="News" />
+          </Route>
 
-        {/* Article Route */}
-        <Route path="/article" exact>
-          <ArticleWithLayout title="Article" backTo="/articles"/>
-        </Route>
+          {/* Article Route */}
+          <Route path="/article" exact>
+            <ArticleWithLayout title="Article" backTo="/articles" />
+          </Route>
 
 
           {/* Profile Route */}

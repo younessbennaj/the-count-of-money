@@ -21,7 +21,6 @@ function reducer(state, action) {
             //Remove the value from the tags list
             return { ...state, tags: state.tags.filter(tag => tag !== value) };
         default:
-            console.log('default');
             return { ...state };
     }
 }
@@ -51,6 +50,14 @@ const Profile = () => {
         "cryptotrading"
     ]
 
+    //Mock data model of avaible currencies 
+    const currenciesMock = [
+        "EUR",
+        "USD",
+        "JPY"
+    ]
+
+    //Local state for the user crendentials fetched from the API
     const [credentials, setCredentials] = useState(null);
 
     //Options of crytos that the user can add to his preferences 
@@ -58,19 +65,32 @@ const Profile = () => {
 
     //Options of news tags that the user can add to his preferences 
     const [tagsOptions, setTagsOptions] = useState(tagsMock);
-    //
+
+    //Local state to handle user currency preference 
+    const [currency, setCurrency] = useState('');
+
+    //Reducer to handle and collect cryptocurrencies and tags preferences of the user
     const [state, dispatch] = useReducer(reducer, { cryptocurrencies: [], tags: [] });
 
     useEffect(() => {
         axios.get("/users/profile")
             .then(response => {
                 const { listCrypto, tags } = response.data;
-                console.log(listCrypto);
+                //Set user crendentials
                 setCredentials(response.data);
                 dispatch({ type: 'INITIALIZE', payload: { listCrypto, tags } });
             })
     }, []);
 
+    //Event handlers 
+
+    //Handle currency change
+    function handleCurrencyChange(e) {
+        //Update the currency proprety in the user credentials local data model
+        setCredentials({ ...credentials, currency: e.target.value });
+    }
+
+    //Handle crypto-currencies change 
     function handleCryptoChange(e) {
         const { value, checked } = e.target;
         //If the value isn't already checked (not in the user preferences)
@@ -82,6 +102,7 @@ const Profile = () => {
         }
     }
 
+    //Handle tags change 
     function handleTagChange(e) {
         const { value, checked } = e.target;
         //If the value isn't already checked (not in the user preferences)
@@ -93,10 +114,9 @@ const Profile = () => {
         }
     }
 
+    //Handle the form submission 
     function handleFormSubmit(e) {
         e.preventDefault();
-        console.log(state.cryptocurrencies);
-        console.log(state.tags);
 
         const userCredentials = {
             mail: credentials.mail,
@@ -105,6 +125,8 @@ const Profile = () => {
             cryptocurrencies: state.cryptocurrencies,
             tags: state.tags
         }
+
+        console.log(userCredentials);
 
         var data = JSON.stringify(userCredentials);
 
@@ -122,13 +144,14 @@ const Profile = () => {
             .then(response => {
                 console.log(response.data);
             })
-        console.log(userCredentials);
     }
 
+    //utils
     function isUserPreferences(value, preferences) {
         //Check if the value is in the user preferences
         return !!preferences.find(preference => preference === value);
     }
+
     return (
         <div>
             <h2>Profile here</h2>
@@ -166,10 +189,8 @@ const Profile = () => {
                         <label htmlFor="username">Username</label>
                         <input type="text" name="username" id="username" />
                     </div>
-                    <select name="currency" id="currency">
-                        <option value="EUR">EUR</option>
-                        <option value="USD">USD</option>
-                        <option value="JPY">JPY</option>
+                    <select onChange={e => handleCurrencyChange(e)} name="currency" id="currency">
+                        {currenciesMock.map(currency => <option key={currency} value={currency}>{currency}</option>)}
                     </select>
                     <fieldset onChange={e => handleCryptoChange(e)}>
                         <legend>Select a crypto</legend>
