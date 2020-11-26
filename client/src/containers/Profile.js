@@ -1,15 +1,27 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import axios from "axios";
 
-const ProfileCard = ({ credentials }) => {
+const ProfileCard = ({ credentials, setIsEditMode }) => {
+
+    /* 
+        credentials => user credentials local state fetched from the API
+
+        setIsEditMode => method to update the UI state that handle normal/edit switch mode of the profile
+    
+    */
+    function handleEditModeClick() {
+        //If the user click on the "edit" button, then we switch to the edit mode and render the ProfileForm
+        setIsEditMode(true);
+    }
     return (
         <>
             {credentials &&
                 <div className="profile-card">
+                    <button onClick={handleEditModeClick}>Edit</button>
                     <h2>{credentials.username}</h2>
                     <p>{credentials.currency}</p>
                     <ul className="profile-card__chips-list">
-                        {credentials.listCrypto.map(crypto => {
+                        {credentials.cryptocurrencies.map(crypto => {
                             return (
                                 <li key={crypto} className="profile-card__chips-item">
                                     <span>{crypto}</span>
@@ -32,7 +44,16 @@ const ProfileCard = ({ credentials }) => {
     )
 }
 
-const ProfileForm = ({ credentials, setCredentials, state, dispatch }) => {
+const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
+
+    /* 
+        credentials => user credentials local state fetched from the API
+
+        dispatch => function to dispatch action to the user preferences reducer function
+
+        setIsEditMode => method to update the UI state that handle normal/edit switch mode of the profile
+    
+    */
 
     // *** MOCK API DATA ***
 
@@ -83,14 +104,13 @@ const ProfileForm = ({ credentials, setCredentials, state, dispatch }) => {
     //Handle username change 
     function handleUsernameChange(e) {
         //Update the username proprety in the user credentials local data model
-        setCredentials({ ...credentials, username: e.target.value });
-
+        dispatch({ type: "UPDATE_USERNAME", payload: { username: e.target.value } })
     }
 
     //Handle currency change
     function handleCurrencyChange(e) {
         //Update the currency proprety in the user credentials local data model
-        setCredentials({ ...credentials, currency: e.target.value });
+        dispatch({ type: "UPDATE_CURRENCY", payload: { currency: e.target.value } })
     }
 
     //Handle crypto-currencies change 
@@ -125,8 +145,8 @@ const ProfileForm = ({ credentials, setCredentials, state, dispatch }) => {
             mail: credentials.mail,
             username: credentials.username,
             currency: credentials.currency,
-            cryptocurrencies: state.cryptocurrencies,
-            tags: state.tags
+            cryptocurrencies: credentials.cryptocurrencies,
+            tags: credentials.tags
         }
 
         console.log(userCredentials);
@@ -146,6 +166,8 @@ const ProfileForm = ({ credentials, setCredentials, state, dispatch }) => {
         axios(config)
             .then(response => {
                 console.log(response.data);
+                //Leave the edit mode and return to the profile card
+                setIsEditMode(false)
             })
     }
 
@@ -153,6 +175,7 @@ const ProfileForm = ({ credentials, setCredentials, state, dispatch }) => {
     function isUserPreferences(value, preferences) {
         //Check if the value is in the user preferences
         return !!preferences.find(preference => preference === value);
+        // return true;
     }
 
     return (
@@ -177,7 +200,7 @@ const ProfileForm = ({ credentials, setCredentials, state, dispatch }) => {
                                         name={crypto}
                                         value={crypto}
                                         //True, if the crypto value from the admin selection is in the user preferences
-                                        defaultChecked={isUserPreferences(crypto, credentials.listCrypto)}
+                                        defaultChecked={isUserPreferences(crypto, credentials.cryptocurrencies)}
                                     />
                                     <label htmlFor={crypto}>{crypto}</label>
                                 </div>
@@ -211,12 +234,11 @@ const ProfileForm = ({ credentials, setCredentials, state, dispatch }) => {
 }
 
 function reducer(state, action) {
-    let { cryptocurrencies, tags, value } = action.payload;
+    let { listCrypto: cryptocurrencies, tags, username, currency, value } = action.payload;
     switch (action.type) {
         //We initlialize our reducer with the value fetched from the user profile
         case 'INITIALIZE':
-            let { listCrypto: cryptocurrencies, tags } = action.payload;
-            return { ...state, cryptocurrencies, tags };
+            return { ...state, cryptocurrencies, tags, username, currency };
         case 'ADD_CRYPTOS':
             //Add the value in the cryptocurrencies list
             return { ...state, cryptocurrencies: [...state.cryptocurrencies, value] };
@@ -229,19 +251,20 @@ function reducer(state, action) {
         case 'REMOVE_TAGS':
             //Remove the value from the tags list
             return { ...state, tags: state.tags.filter(tag => tag !== value) };
+        case 'UPDATE_USERNAME':
+            //Update the username value in the local state
+            return { ...state, username };
+        case 'UPDATE_CURRENCY':
+            //Update the username value in the local state
+            return { ...state, currency };
         default:
             return { ...state };
     }
 }
 const Profile = () => {
 
-    //UI State
-
     //boolean to know if we are in edit mode or not
     const [isEditMode, setIsEditMode] = useState(false);
-
-    //Local state for the user crendentials fetched from the API
-    const [credentials, setCredentials] = useState(null);
 
     //Reducer to handle and collect cryptocurrencies and tags preferences of the user
     const [state, dispatch] = useReducer(reducer, { cryptocurrencies: [], tags: [] });
@@ -251,20 +274,26 @@ const Profile = () => {
             .then(response => {
                 const { listCrypto, tags } = response.data;
                 //Set user crendentials
-                setCredentials(response.data);
-                dispatch({ type: 'INITIALIZE', payload: { listCrypto, tags } });
+                dispatch({ type: 'INITIALIZE', payload: response.data });
             })
     }, []);
 
     return (
         <div>
             <h2>Profile here</h2>
-
-            {/* Profile Card */}
-            <ProfileCard credentials={credentials} />
-
-            {/* Profile Form */}
-            <ProfileForm state={state} dispatch={dispatch} credentials={credentials} setCredentials={setCredentials} />
+            {/* If the user want to update his profile and preferences, then switch to edit mode (=> display ProfileForm) */}
+            {!isEditMode ?
+                <ProfileCard
+                    credentials={state}
+                    setIsEditMode={setIsEditMode}
+                />
+                :
+                <ProfileForm
+                    dispatch={dispatch}
+                    credentials={state}
+                    setIsEditMode={setIsEditMode}
+                />
+            }
         </div>
     );
 }
