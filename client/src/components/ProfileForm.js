@@ -21,6 +21,8 @@ const UIChips = ({item, defaultChecked}) => {
                 px-4 
                 inline-block
                 sibling-checked:text-gray-50
+                mr-3
+                my-1
                 "
              >
                 {item}
@@ -169,7 +171,7 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
                 <form className="profile-form" onSubmit={e => handleFormSubmit(e)}>
                     <div className="flex flex-col mt-1 relative rounded-md shadow-sm">
                         <label 
-                            htmlFor="username" class="block text-sm font-medium text-gray-700 pl-1 pb-1"
+                            htmlFor="username" className="block text-sm font-medium text-gray-700 pl-1 pb-1"
                         >
                             Username
                         </label>
@@ -191,7 +193,7 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
                     />
                     </div>
                     <div className="flex flex-col mt-1 relative rounded-md shadow-sm">
-                        <label  class="block text-sm font-medium text-gray-700 pl-1 pb-1" htmlFor="currency" >Currency</label>
+                        <label  className="block text-sm font-medium text-gray-700 pl-1 pb-1" htmlFor="currency" >Currency</label>
                         <select
                             onChange={e => handleCurrencyChange(e)}
                             name="currency"
@@ -211,44 +213,37 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
                         </select>
                     </div>
                     <fieldset onChange={e => handleCryptoChange(e)}>
-                        <legend>Select a crypto</legend>
+                        <legend className="block text-sm font-medium text-gray-700 pl-1 pb-1">Select a crypto</legend>
                         {cryptosOptions.map(crypto => {
                             return (
-                                <UIChips key={crypto} item={crypto}  defaultChecked={true}/>
-                                // <div key={crypto}>
-                                //     <input
-                                //         type="checkbox"
-                                //         id={crypto}
-                                //         name={crypto}
-                                //         value={crypto}
-                                //         //True, if the crypto value from the admin selection is in the user preferences
-                                //         defaultChecked={isUserPreferences(crypto, credentials.cryptocurrencies)}
-                                //     />
-                                //     <label htmlFor={crypto}>{crypto}</label>
-                                // </div>
+                                <UIChips 
+                                    key={crypto} 
+                                    item={crypto}  
+                                    //True, if the crypto value from the admin selection is in the user preferences
+                                    defaultChecked={isUserPreferences(crypto, credentials.cryptocurrencies)}
+                                />
                             )
                         })}
 
                     </fieldset>
                     <fieldset onChange={e => handleTagChange(e)}>
-                        <legend>Select a tag</legend>
+                        <legend className="block text-sm font-medium text-gray-700 pl-1 pb-1">Select a tag</legend>
                         {tagsOptions.map(tag => {
                             return (
-                                <div key={tag}>
-                                    <input
-                                        type="checkbox"
-                                        id={tag}
-                                        name={tag}
-                                        value={tag}
-                                        //True, if the tag value from the admin selection is in the user preferences
-                                        defaultChecked={isUserPreferences(tag, credentials.tags)}
-                                    />
-                                    <label htmlFor={tag}>{tag}</label>
-                                </div>
+                                <UIChips 
+                                    key={tag} 
+                                    item={tag}  
+                                    //True, if the tag value from the admin selection is in the user preferences
+                                    defaultChecked={isUserPreferences(tag, credentials.tags)}
+                                />
                             )
                         })}
                     </fieldset>
-                    <input type="submit" value="submit" />
+                    <input 
+                        className="mt-6 py-2 px-4 bg-blue-500 rounded-md text-gray-50 text-lg hover:bg-blue-600"
+                        type="submit" 
+                        value="submit"
+                    />
                 </form>
             }
         </>

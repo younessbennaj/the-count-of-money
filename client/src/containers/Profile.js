@@ -51,8 +51,8 @@ const Profile = () => {
     }, []);
 
     return (
-        <div>
-            <h2 className="text-3xl font-bold">Profile here</h2>
+        <div className="sm:w-full md:w-full lg:w-1/2 mx-auto sm:px-6 lg:px-8">
+            <h2 className="text-xl font-bold">Profile informations</h2>
             {/* If the user want to update his profile and preferences, then switch to edit mode (=> display ProfileForm) */}
             {!isEditMode ?
                 <ProfileCard
