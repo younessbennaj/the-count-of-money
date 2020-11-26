@@ -1,30 +1,40 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import axios from "axios";
 
-function reducer(state, action) {
-    let { cryptocurrencies, tags, value } = action.payload;
-    switch (action.type) {
-        //We initlialize our reducer with the value fetched from the user profile
-        case 'INITIALIZE':
-            let { listCrypto: cryptocurrencies, tags } = action.payload;
-            return { ...state, cryptocurrencies, tags };
-        case 'ADD_CRYPTOS':
-            //Add the value in the cryptocurrencies list
-            return { ...state, cryptocurrencies: [...state.cryptocurrencies, value] };
-        case 'REMOVE_CRYPTOS':
-            //Remove the value from the cryptocurrencies list
-            return { ...state, cryptocurrencies: state.cryptocurrencies.filter(crypto => crypto !== value) };
-        case 'ADD_TAGS':
-            //Add the value in the tags list
-            return { ...state, tags: [...state.tags, value] };
-        case 'REMOVE_TAGS':
-            //Remove the value from the tags list
-            return { ...state, tags: state.tags.filter(tag => tag !== value) };
-        default:
-            return { ...state };
-    }
+const ProfileCard = ({ credentials }) => {
+    return (
+        <>
+            {credentials &&
+                <div className="profile-card">
+                    <h2>{credentials.username}</h2>
+                    <p>{credentials.currency}</p>
+                    <ul className="profile-card__chips-list">
+                        {credentials.listCrypto.map(crypto => {
+                            return (
+                                <li key={crypto} className="profile-card__chips-item">
+                                    <span>{crypto}</span>
+                                </li>
+                            )
+                        })}
+                    </ul>
+                    <ul className="profile-card__chips-list">
+                        {credentials.tags.map(tag => {
+                            return (
+                                <li key={tag} className="profile-card__chips-item">
+                                    <span>{tag}</span>
+                                </li>
+                            )
+                        })}
+                    </ul>
+                </div>
+            }
+        </>
+    )
 }
-const Profile = () => {
+
+const ProfileForm = ({ credentials, setCredentials, state, dispatch }) => {
+
+    // *** MOCK API DATA ***
 
     //Mock Data model of Cryptos added by the administrator 
     const cryptosMock = [
@@ -57,8 +67,7 @@ const Profile = () => {
         "JPY"
     ]
 
-    //Local state for the user crendentials fetched from the API
-    const [credentials, setCredentials] = useState(null);
+    // *** LOCAL STATE ***
 
     //Options of crytos that the user can add to his preferences 
     const [cryptosOptions, setCryptosOptions] = useState(cryptosMock);
@@ -69,20 +78,14 @@ const Profile = () => {
     //Local state to handle user currency preference 
     const [currency, setCurrency] = useState('');
 
-    //Reducer to handle and collect cryptocurrencies and tags preferences of the user
-    const [state, dispatch] = useReducer(reducer, { cryptocurrencies: [], tags: [] });
+    // *** Event handlers *** 
 
-    useEffect(() => {
-        axios.get("/users/profile")
-            .then(response => {
-                const { listCrypto, tags } = response.data;
-                //Set user crendentials
-                setCredentials(response.data);
-                dispatch({ type: 'INITIALIZE', payload: { listCrypto, tags } });
-            })
-    }, []);
+    //Handle username change 
+    function handleUsernameChange(e) {
+        //Update the username proprety in the user credentials local data model
+        setCredentials({ ...credentials, username: e.target.value });
 
-    //Event handlers 
+    }
 
     //Handle currency change
     function handleCurrencyChange(e) {
@@ -153,41 +156,12 @@ const Profile = () => {
     }
 
     return (
-        <div>
-            <h2>Profile here</h2>
-
-            {/* Profile Card */}
-            {credentials &&
-                <div className="profile-card">
-                    <h2>{credentials.username}</h2>
-                    <p>{credentials.currency}</p>
-                    <ul className="profile-card__chips-list">
-                        {cryptosOptions.map(crypto => {
-                            return (
-                                <li key={crypto} className="profile-card__chips-item">
-                                    <span>{crypto}</span>
-                                </li>
-                            )
-                        })}
-                    </ul>
-                    <ul className="profile-card__chips-list">
-                        {tagsOptions.map(tag => {
-                            return (
-                                <li key={tag} className="profile-card__chips-item">
-                                    <span>{tag}</span>
-                                </li>
-                            )
-                        })}
-                    </ul>
-                </div>
-            }
-
-            {/* Profile Form */}
+        <>
             {credentials &&
                 <form className="profile-form" onSubmit={e => handleFormSubmit(e)}>
                     <div>
                         <label htmlFor="username">Username</label>
-                        <input type="text" name="username" id="username" />
+                        <input onChange={handleUsernameChange} type="text" name="username" id="username" />
                     </div>
                     <select onChange={e => handleCurrencyChange(e)} name="currency" id="currency">
                         {currenciesMock.map(currency => <option key={currency} value={currency}>{currency}</option>)}
@@ -232,6 +206,65 @@ const Profile = () => {
                     <input type="submit" value="submit" />
                 </form>
             }
+        </>
+    )
+}
+
+function reducer(state, action) {
+    let { cryptocurrencies, tags, value } = action.payload;
+    switch (action.type) {
+        //We initlialize our reducer with the value fetched from the user profile
+        case 'INITIALIZE':
+            let { listCrypto: cryptocurrencies, tags } = action.payload;
+            return { ...state, cryptocurrencies, tags };
+        case 'ADD_CRYPTOS':
+            //Add the value in the cryptocurrencies list
+            return { ...state, cryptocurrencies: [...state.cryptocurrencies, value] };
+        case 'REMOVE_CRYPTOS':
+            //Remove the value from the cryptocurrencies list
+            return { ...state, cryptocurrencies: state.cryptocurrencies.filter(crypto => crypto !== value) };
+        case 'ADD_TAGS':
+            //Add the value in the tags list
+            return { ...state, tags: [...state.tags, value] };
+        case 'REMOVE_TAGS':
+            //Remove the value from the tags list
+            return { ...state, tags: state.tags.filter(tag => tag !== value) };
+        default:
+            return { ...state };
+    }
+}
+const Profile = () => {
+
+    //UI State
+
+    //boolean to know if we are in edit mode or not
+    const [isEditMode, setIsEditMode] = useState(false);
+
+    //Local state for the user crendentials fetched from the API
+    const [credentials, setCredentials] = useState(null);
+
+    //Reducer to handle and collect cryptocurrencies and tags preferences of the user
+    const [state, dispatch] = useReducer(reducer, { cryptocurrencies: [], tags: [] });
+
+    useEffect(() => {
+        axios.get("/users/profile")
+            .then(response => {
+                const { listCrypto, tags } = response.data;
+                //Set user crendentials
+                setCredentials(response.data);
+                dispatch({ type: 'INITIALIZE', payload: { listCrypto, tags } });
+            })
+    }, []);
+
+    return (
+        <div>
+            <h2>Profile here</h2>
+
+            {/* Profile Card */}
+            <ProfileCard credentials={credentials} />
+
+            {/* Profile Form */}
+            <ProfileForm state={state} dispatch={dispatch} credentials={credentials} setCredentials={setCredentials} />
         </div>
     );
 }
