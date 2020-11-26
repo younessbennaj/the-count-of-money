@@ -184,10 +184,10 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
                 <form className="profile-form" onSubmit={e => handleFormSubmit(e)}>
                     <div>
                         <label htmlFor="username">Username</label>
-                        <input onChange={handleUsernameChange} type="text" name="username" id="username" />
+                        <input value={credentials.username} onChange={handleUsernameChange} type="text" name="username" id="username" />
                     </div>
-                    <select onChange={e => handleCurrencyChange(e)} name="currency" id="currency">
-                        {currenciesMock.map(currency => <option key={currency} value={currency}>{currency}</option>)}
+                    <select onChange={e => handleCurrencyChange(e)} name="currency" id="currency" defaultValue={credentials.currency}>
+                        {currenciesMock.map(currency => <option key={currency} value={currency} >{currency}</option>)}
                     </select>
                     <fieldset onChange={e => handleCryptoChange(e)}>
                         <legend>Select a crypto</legend>
