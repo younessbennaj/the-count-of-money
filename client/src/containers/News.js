@@ -27,8 +27,8 @@ const News = () => {
     }, []);
 
     return (
-        <div class="flex flex-wrap -m-3">
-            {data.map((article) => (
+        <div className="flex flex-wrap -m-3">
+            {data.map((article, index) => (
                 <ArticleCard
                     title={article.title}
                     content={article.description}
@@ -36,7 +36,7 @@ const News = () => {
                     source={article.source.name}
                     url={article.url}
                     image={article.urlToImage}
-                    key={article.name}
+                    key={index}
                 />
             ))}
         </div>
