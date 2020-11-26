@@ -22,7 +22,7 @@ const UIChips = ({item, defaultChecked}) => {
                 inline-block
                 sibling-checked:text-gray-50
                 mr-3
-                my-1
+                my-2
                 "
              >
                 {item}
@@ -169,7 +169,7 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
         <>
             {credentials &&
                 <form className="profile-form" onSubmit={e => handleFormSubmit(e)}>
-                    <div className="flex flex-col mt-1 relative rounded-md shadow-sm">
+                    <div className="flex flex-col mt-1 relative rounded-md shadow-sm my-4">
                         <label 
                             htmlFor="username" className="block text-sm font-medium text-gray-700 pl-1 pb-1"
                         >
@@ -192,7 +192,7 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
                                 sm:text-sm rounded-md"
                     />
                     </div>
-                    <div className="flex flex-col mt-1 relative rounded-md shadow-sm">
+                    <div className="flex flex-col mt-1 relative rounded-md shadow-sm my-4">
                         <label  className="block text-sm font-medium text-gray-700 pl-1 pb-1" htmlFor="currency" >Currency</label>
                         <select
                             onChange={e => handleCurrencyChange(e)}
@@ -212,7 +212,7 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
                             {currenciesMock.map(currency => <option key={currency} value={currency} >{currency}</option>)}
                         </select>
                     </div>
-                    <fieldset onChange={e => handleCryptoChange(e)}>
+                    <fieldset onChange={e => handleCryptoChange(e)} className="my-4">
                         <legend className="block text-sm font-medium text-gray-700 pl-1 pb-1">Select a crypto</legend>
                         {cryptosOptions.map(crypto => {
                             return (
@@ -226,7 +226,7 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
                         })}
 
                     </fieldset>
-                    <fieldset onChange={e => handleTagChange(e)}>
+                    <fieldset onChange={e => handleTagChange(e)} className="my-4">
                         <legend className="block text-sm font-medium text-gray-700 pl-1 pb-1">Select a tag</legend>
                         {tagsOptions.map(tag => {
                             return (
