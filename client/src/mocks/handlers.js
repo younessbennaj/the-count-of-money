@@ -21,8 +21,8 @@ export const handlers = [
             ctx.status(200),
             ctx.json({
                 mail: "john.doe@email.com",
-                username: "johndoe",
-                currency: "EUR",
+                nickname: "johndoe",
+                currencies: "EUR",
                 listCrypto: [
                     "Bitcoin",
                     "Ethereum",
@@ -30,7 +30,7 @@ export const handlers = [
                     "Tether",
                     "BitcoinCash"
                 ],
-                tags: [
+                listWeb: [
                     "blockchain",
                     "bitcoin",
                     "cryptotrading"
