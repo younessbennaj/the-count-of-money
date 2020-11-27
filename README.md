@@ -4,6 +4,8 @@
 
 ## Get started
 
+# General
+
 ### Run with docker compose
 
 ```
@@ -84,6 +86,24 @@ docker run --name the-count-of-money-client -p 3000:3000 -d <your username>/the-
 ```
 
 You navigate go to localhost:3000 
+
+# Client
+
+## Mock API VS production API
+
+To launch the client using the mock API for developement purpose (only on Google Chrome), run: 
+
+```
+REACT_APP_API_CONFIG=development npm run start
+```
+
+This command will set an env variable that tell to the react app to work with MSWJS to intercept http request and respond with a mock data model. 
+
+If you want to work with the real API, run:
+
+```
+npm run start
+``` 
 
 #Product Canvas 
 

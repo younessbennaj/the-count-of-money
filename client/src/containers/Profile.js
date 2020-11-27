@@ -44,7 +44,6 @@ const Profile = () => {
     useEffect(() => {
         axios.get("/users/profile")
             .then(response => {
-                const { listCrypto, tags } = response.data;
                 //Set user crendentials
                 dispatch({ type: 'INITIALIZE', payload: response.data });
             })

@@ -78,13 +78,10 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
     // *** LOCAL STATE ***
 
     //Options of crytos that the user can add to his preferences 
-    const [cryptosOptions, setCryptosOptions] = useState(cryptosMock);
+    const [cryptosOptions] = useState(cryptosMock);
 
     //Options of news tags that the user can add to his preferences 
-    const [tagsOptions, setTagsOptions] = useState(tagsMock);
-
-    //Local state to handle user currency preference 
-    const [currency, setCurrency] = useState('');
+    const [tagsOptions] = useState(tagsMock);
 
     // *** Event handlers *** 
 
@@ -104,7 +101,7 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
     function handleCryptoChange(e) {
         const { value, checked } = e.target;
         //If the value isn't already checked (not in the user preferences)
-        if (e.target.checked) {
+        if (checked) {
             dispatch({ type: 'ADD_CRYPTOS', payload: { value } });
         } else {
             //If it's already in the user preferences
@@ -116,7 +113,7 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
     function handleTagChange(e) {
         const { value, checked } = e.target;
         //If the value isn't already checked (not in the user preferences)
-        if (e.target.checked) {
+        if (checked) {
             dispatch({ type: 'ADD_TAGS', payload: { value } });
         } else {
             //If it's already in the user preferences
