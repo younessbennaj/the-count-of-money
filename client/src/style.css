@@ -1,0 +1,4 @@
+.chips input[type="checkbox"]:checked + span {
+    color: #fff;
+    background-color: #2563EB;
+}
