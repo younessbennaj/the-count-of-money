@@ -25,6 +25,8 @@ export const authenticateUser = ({ email: mail, password }, type) => {
         .then(function (response) {
             //We store the JWT sent by the server
             sessionStorage.setItem('jwt', response.data.jwt);
+            //set axios request header with the token
+            axios.defaults.headers.common['jwt'] = sessionStorage.getItem('jwt');
         })
         .catch(function (error) {
             console.log(error);

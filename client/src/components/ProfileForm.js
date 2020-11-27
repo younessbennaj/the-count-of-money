@@ -127,29 +127,19 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
 
         const userCredentials = {
             mail: credentials.mail,
-            username: credentials.username,
-            currency: credentials.currency,
-            cryptocurrencies: credentials.cryptocurrencies,
-            tags: credentials.tags
+            nickname: credentials.username,
+            currencies: credentials.currency,
+            listCrypto: credentials.cryptocurrencies,
+            listWeb: credentials.tags
         }
-
-        console.log(userCredentials);
 
         var data = JSON.stringify(userCredentials);
 
-        var config = {
-            method: 'put',
-            url: '/users/profile',
-            headers: {
-                'Content-Type': 'application/json',
-                //add JWT in global config header
-            },
-            data: data
-        };
+        console.log(data);
 
-        axios(config)
+        axios.put('/users/profile', data) 
             .then(response => {
-                console.log(response.data);
+                console.log(response);
                 //Leave the edit mode and return to the profile card
                 setIsEditMode(false)
             })
