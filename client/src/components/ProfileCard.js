@@ -33,7 +33,7 @@ const ProfileCard = ({ credentials, setIsEditMode }) => {
                     </div>
 
                     <div>
-                        <p className="text-2xl my-4">Your cryptocurrencies preferences</p>
+                        <span className="uppercase text-gray-400 text-xs my-4 inline-block">Your cryptocurrencies preferences</span>
                         <ul className="">
                             {credentials.cryptocurrencies.map(crypto => {
                                 return (
@@ -45,12 +45,12 @@ const ProfileCard = ({ credentials, setIsEditMode }) => {
                         </ul>
                     </div>
                     <div>
-                        <p className="text-2xl my-4">Your news preferences</p>
+                        <span className="uppercase text-gray-400 text-xs my-4 inline-block">Your news preferences</span>
                         <ul className="profile-card__chips-list">
                             {credentials.tags.map(tag => {
                                 return (
                                     <li key={tag} className="inline-block">
-                                        <span className="bg-blue-200 rounded-lg px-2 py-2 inline-block mx-1 text-blue-700">#{tag}</span>
+                                        <span className="bg-blue-200 rounded-lg px-2 py-2 inline-block m-1 text-blue-700">#{tag}</span>
                                     </li>
                                 )
                             })}
