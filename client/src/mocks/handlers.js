@@ -16,6 +16,36 @@ export const handlers = [
             ctx.status(200),
         )
     }),
+    rest.get('/users/profile', (req, res, ctx) => {
+        return res(
+            ctx.status(200),
+            ctx.json({
+                mail: "john.doe@email.com",
+                username: "johndoe",
+                currency: "EUR",
+                listCrypto: [
+                    "Bitcoin",
+                    "Ethereum",
+                    "XRP",
+                    "Tether",
+                    "BitcoinCash"
+                ],
+                tags: [
+                    "blockchain",
+                    "bitcoin",
+                    "cryptotrading"
+                ]
+
+            })
+        )
+    }),
+    rest.put('/users/profile', (req, res, ctx) => {
+        console.log(req.body);
+        return res(
+            ctx.status(200),
+            ctx.json({ message: "profile updated" })
+        )
+    }),
     rest.get('/user', (req, res, ctx) => {
         // Check if the user is authenticated in this session
         const isAuthenticated = sessionStorage.getItem('is-authenticated')
@@ -158,7 +188,7 @@ export const handlers = [
             ),
         )
     }),
-    
+
     rest.get('/articles', (req, res, ctx) => {
         return res(
             ctx.status(200),
