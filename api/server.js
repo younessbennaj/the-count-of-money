@@ -7,6 +7,17 @@ const jwt = require('jsonwebtoken');
 var bodyParser = require('body-parser')
 var cors = require('cors');
 var ObjectId = require('mongodb').ObjectID;
+//
+const session = require('express-session');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const GOOGLE_CLIENT_ID = '10402001941-iplgmi34fo8q4eg3elq114cfklp41u65.apps.googleusercontent.com';
+const GOOGLE_CLIENT_SECRET = 'R7ZqmUbsOmdKIl0VmqWqZigG';
+const cryptocompare = require('cryptocompare')
+var userProfile;
+global.fetch = require('node-fetch');
+
+
 
 const CoinGeckoClient = new CoinGecko();
 var app = express();
@@ -14,12 +25,41 @@ app.use(cors());
 app.use(express.json());
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(passport.initialize());
+app.use(passport.session());
+
+cryptocompare.setApiKey('76f92e58e8c5bd548cc681f6707d99c5833d55072daef8c5d0ee99721b6f60b9')
+
+passport.serializeUser(function (user, cb) {
+  cb(null, user);
+});
+
+passport.deserializeUser(function (obj, cb) {
+  cb(null, obj);
+});
+
+app.use(session({
+  resave: false,
+  saveUninitialized: true,
+  secret: 'SECRET'
+}));
 
 
-var checkCoinGecko = async () => {
-  let data = await CoinGeckoClient.ping()
-  return (data.code)
-}
+passport.use(new GoogleStrategy({
+  clientID: GOOGLE_CLIENT_ID,
+  clientSecret: GOOGLE_CLIENT_SECRET,
+  callbackURL: "http://localhost:5000/users/auth/google/callback"
+},
+  function (accessToken, refreshToken, profile, done) {
+    userProfile = profile;
+    return done(null, userProfile);
+  }
+));
+
+// var checkCoinGecko = async () => {
+//   let data = await CoinGeckoClient.ping()
+//   return (data.code)
+// }
 
 app.listen(5000, function () {
   console.log('NodeJs is running on localhost:5000 !')
@@ -37,7 +77,6 @@ db.connect(() => {
     console.log('Mongo Listening :5555');
   });
 });
-
 
 /*                                            Connexion                                         */
 // Connexion a l'user
@@ -77,6 +116,9 @@ app.post('/users/register', (req, res) => {
   if (req.body.hasOwnProperty('mail') && req.body.hasOwnProperty('password')) {
     let mail = req.body.mail
     let password = req.body.password
+    if (password == "" || mail == "") {
+      res.status(400).end(JSON.stringify({ message: "Mail or password can not be null" }));
+    }
     db.get().collection("users").find({ mail }).toArray(function (err, result) {
       if (err) throw err;
       if (Object.keys(result).length === 0) {
@@ -318,7 +360,7 @@ app.delete('/cryptos/:cmid', (req, res) => {
         db.get().collection("users").find({ "_id": new ObjectId(decoded.userId) }).toArray(function (error, result) {
           if (error) throw error;
           if (result[0].right == 1) {
-            db.get().collection("adminCryptos").deleteOne({id :req.params.cmid});
+            db.get().collection("adminCryptos").deleteOne({ id: req.params.cmid });
             res.status(200).end(JSON.stringify({ message: "Crypto deleted" }));
           }
         });
@@ -331,60 +373,49 @@ app.delete('/cryptos/:cmid', (req, res) => {
   }
 });
 
-app.get('/cryptos', (req, res) => {
-  res.setHeader('Content-Type', 'application/json');
-  if (req.headers.hasOwnProperty('jwt') && req.body.hasOwnProperty('id')) {
-    jwt.verify(req.headers.jwt, 'RANDOM_TOKEN_SECRET', function (err, decoded) {
-      if (err) {
-        res.status(400).end(JSON.stringify({ message: "Token expired" }));
-      }
-      if (decoded.userId.length === 24) {
-        db.get().collection("users").find({ "_id": new ObjectId(decoded.userId) }).toArray(async function (error, result) {
-          if (error) throw error;
-          if (result[0].right == 1) {
-            db.get().collection("adminCryptos").deleteOne({id :req.body.id});
-            res.status(200).end(JSON.stringify({ message: "Crypto as been deleted" }));
-          } else {
-            res.status(400).end(JSON.stringify({ message: "Argument passed in must be a single String of 24 characters" }));
-          }
-        });
-      } else {
-        res.status(400).end(JSON.stringify({ message: "Argument passed in must be a single String of 24 characters" }));
-      }
-    });
-  } else {
-    res.status(400).end(JSON.stringify({ message: "Invalid request" }));
-  }
-});
 
-app.get('/cryptos/:cmid/history/:period', (req, res) => {
+app.get('/cryptos/:cmid/history/:period', async (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   if (req.headers.hasOwnProperty('jwt')) {
-    jwt.verify(req.headers.jwt, 'RANDOM_TOKEN_SECRET', function (err, decoded) {
+    jwt.verify(req.headers.jwt, 'RANDOM_TOKEN_SECRET', async function (err, decoded) {
       if (err) {
         res.status(400).end(JSON.stringify({ message: "Token expired" }));
       }
-      if (decoded.userId.length === 24) {
-        db.get().collection("users").find({ "_id": new ObjectId(decoded.userId) }).toArray(async function (error, result) {
-        if (req.params.period == "daily") {
-          let data = await CoinGeckoClient.coins.fetchMarketChart(req.params.cmid, {"coinId": req.params.cmid, "vs_currency": result[0].currencies, "days": "60", "interval": "daily"});
-          res.status(200).send(data.data);
-        }
-        if (req.params.period == "hourly") {
-          let data = await CoinGeckoClient.coins.fetchMarketChart(req.params.cmid, {"coinId": req.params.cmid, "vs_currency": result[0].currencies, "days": "2", "interval": "hourly"});
-          res.status(200).send(data.data);
-        }
-        if (req.params.period == "minute") {
-          let data = await CoinGeckoClient.coins.fetchMarketChart(req.params.cmid, {"coinId": req.params.cmid, "vs_currency": result[0].currencies, "days": "60", "interval": "minutely"});
-          let newJson = {prices: data.data.prices.slice(0, 120), market_caps: data.data.market_caps.slice(0, 120), total_volumes: data.data.total_volumes.slice(0, 120)};
-          res.status(200).send(newJson);
-        } else {
-          res.status(400).end(JSON.stringify({ message: "Period error" }));
+      db.get().collection("users").find({ "_id": new ObjectId(decoded.userId) }).toArray(async function (err2, result) {
+        if (err2) throw err
+        switch (req.params.period) {
+          case "minute":
+            cryptocompare.histoMinute(req.params.cmid, result[0].currencies, { "limit": 119 })
+              .then(data => {
+                res.status(200).send(data);
+              })
+              .catch(error => {
+                res.status(400).end(JSON.stringify({ message: error }));
+              })
+            break;
+          case "hourly":
+            cryptocompare.histoHour(req.params.cmid, result[0].currencies, { "limit": 47 })
+              .then(data => {
+                res.status(200).send(data);
+              })
+              .catch(error => {
+                res.status(400).end(JSON.stringify({ message: error }));
+              })
+            break;
+          case "daily":
+            cryptocompare.histoDay(req.params.cmid, result[0].currencies, { "limit": 59 })
+              .then(data => {
+                res.status(200).send(data);
+              })
+              .catch(error => {
+                res.status(400).end(JSON.stringify({ message: error }));
+              })
+            break;
+          default:
+            res.status(400).end(JSON.stringify({ message: "period not valid" }));
+            break;
         }
       });
-      } else {
-        res.status(400).end(JSON.stringify({ message: "Argument passed in must be a single String of 24 characters" }));
-      }
     });
   } else {
     res.status(400).end(JSON.stringify({ message: "Invalid request" }));
@@ -400,7 +431,7 @@ app.get('/cryptos/:cmid', (req, res) => {
       }
       if (decoded.userId.length === 24) {
         db.get().collection("users").find({ "_id": new ObjectId(decoded.userId) }).toArray(async function (error, result) {
-          let data = await CoinGeckoClient.coins.fetch(req.params.cmid, {"tickers": false, "market_data": false, "community_data": false, "developer_data":false, "localization":false, "sparkline":false});
+          let data = await CoinGeckoClient.coins.fetch(req.params.cmid, { "tickers": false, "market_data": false, "community_data": false, "developer_data": false, "localization": false, "sparkline": false });
           res.status(200).send(data.data);
         });
       } else {
@@ -411,3 +442,57 @@ app.get('/cryptos/:cmid', (req, res) => {
     res.status(400).end(JSON.stringify({ message: "Invalid request" }));
   }
 });
+
+
+app.get('/users/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+app.get('/users/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/error' }),
+  function (req, res) {
+    let mail = res.req.user.emails[0].value;
+    let nickname = res.req.user.displayName;
+    let password = res.req.user.id;
+    let JsonObj = {};
+    db.get().collection("users").find({ $or: [{ nickname }, { mail }] }).toArray(function (err, result) {
+      if (result.length === 0) {
+        bcrypt.hash(password, 10, function (err, hash) {
+          let newUser = { "body": {} };
+          newUser.body.mail = mail;
+          newUser.body.password = hash;
+          newUser.body.nickname = nickname;
+          newUser.body.currencies = "eur";
+          newUser.body.listCrypto = [];
+          newUser.body.listWeb = [];
+          newUser.body.right = 0;
+          db.get().collection("users").insertOne(newUser.body, function (err, ress) {
+            if (err) throw err;
+            db.get().collection("users").find({ $or: [{ nickname }, { mail }] }).toArray(function (err, result) {
+              if (bcrypt.compareSync(password, result[0].password)) {
+                const token = jwt.sign(
+                  { userId: result[0]._id },
+                  'RANDOM_TOKEN_SECRET',
+                  { expiresIn: '24h' });
+                JsonObj = {
+                  jwt: token
+                };
+                res.status(200).send(JsonObj);
+              }
+            });
+          });
+        });
+      } else {
+        if (bcrypt.compareSync(password, result[0].password)) {
+          const token = jwt.sign(
+            { userId: result[0]._id },
+            'RANDOM_TOKEN_SECRET',
+            { expiresIn: '24h' });
+          JsonObj = {
+            jwt: token
+          };
+          res.status(200).send(JsonObj);
+        } else {
+          res.status(400).end(JSON.stringify({ message: "Email already used on the site please connect without google" }));
+        }
+      }
+    });
+  });
