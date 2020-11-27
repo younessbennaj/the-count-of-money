@@ -6,7 +6,7 @@ import ProfileCard from '../components/ProfileCard';
 import ProfileForm from '../components/ProfileForm';
 
 function reducer(state, action) {
-    let { listCrypto: cryptocurrencies, tags, username, currency, value } = action.payload;
+    let { cryptocurrencies, tags, username, currency, value } = action.payload;
     switch (action.type) {
         //We initlialize our reducer with the value fetched from the user profile
         case 'INITIALIZE':
@@ -42,11 +42,22 @@ const Profile = () => {
     const [state, dispatch] = useReducer(reducer, { cryptocurrencies: [], tags: [] });
 
     useEffect(() => {
+        console.log(axios.defaults);
         axios.get("/users/profile")
             .then(response => {
-                const { listCrypto, tags } = response.data;
+
+                //Format the response data
+                const { nickname: username, listWeb: tags, listCrypto: cryptocurrencies, currencies: currency } = response.data;
+
+                const payload = {
+                    username,
+                    tags,
+                    cryptocurrencies,
+                    currency
+                }
+
                 //Set user crendentials
-                dispatch({ type: 'INITIALIZE', payload: response.data });
+                dispatch({ type: 'INITIALIZE', payload });
             })
     }, []);
 

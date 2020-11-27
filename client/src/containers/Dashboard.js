@@ -19,28 +19,18 @@ const Dashboard = () => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        //with the real API
-        // axios.get('http://localhost:5000/api')
-        //   .then(response => {
-        //     console.log(response.data);
-        //     setMessage(response.data.message)
-        //   })
-
-        //With MSWJS actived
-        axios.get('/crypto')
-        .then(response => {
-            setData(response.data);
-        })
+        axios.get('/cryptos')
+            .then(response => {
+                setData(response.data);
+            })
     }, []);
 
     function rowClick(e) {
-        console.log(e);
-        if(e.rowType === "data") {
+        if (e.rowType === "data") {
             history.push({
                 pathname: '/cryptocurrency',
                 state: { cryptoId: e.component.getKeyByRowIndex(e.rowIndex).id } //this.props.location.state.detail
             })
-            console.log();
         }
     }
 
@@ -56,7 +46,7 @@ const Dashboard = () => {
                 onRowClick={rowClick}
             >
                 <Column dataField="id" width={0} />
-                <Column dataField="image" caption="" width={40} allowSorting={false} cellRender={ImageCell}/>
+                <Column dataField="image" caption="" width={40} allowSorting={false} cellRender={ImageCell} />
                 <Column dataField="name" width={100} />
                 <Column dataField="current_price" caption="Price" format="#0.####" dataType="number" />
                 {/* <Column dataField="quote.USD.price" caption="µChange" dataType="number" width={140} format="#0.####" cellRender={ChangeCell} /> */}
