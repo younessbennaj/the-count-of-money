@@ -7,14 +7,14 @@ import {
 //Style
 import "../index.css";
 
-//Components
+//Chart
 
 const Cryptocurrency = () => {
     let location = useLocation();
     let cryptoId = location.state.cryptoId;
     console.log(cryptoId);
-    const [crypto, setCrypto] = useState("");
 
+    const [crypto, setCrypto] = useState("");
 
     useEffect(() => {
         //With MSWJS actived
@@ -34,7 +34,7 @@ const Cryptocurrency = () => {
                         <div className="p-4 flex-1 flex flex-col">
                             <h3 className="mb-4 text-xl">{crypto.name}</h3>
                             <div className="mb-4 text-grey-darker text-sm flex-1">
-                            <div dangerouslySetInnerHTML={{ __html: crypto.description.en }} />
+                                <div dangerouslySetInnerHTML={{ __html: crypto.description.en }} />
                             </div>
                             <a href={crypto.links.homepage[0]} className="border-t border-grey-light pt-2 text-xs text-blue hover:text-red uppercase no-underline tracking-wide">Official website</a>
                             <p className="text-xs">{crypto.symbol}</p>

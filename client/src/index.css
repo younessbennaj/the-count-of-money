@@ -52,3 +52,7 @@ code {
   transform: scale(1.05, 1.05);
   transition-duration: 0.5s
 }
+
+.dx-data-row:hover {
+  background-color: lightblue;
+}

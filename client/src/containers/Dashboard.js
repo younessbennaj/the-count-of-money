@@ -34,19 +34,26 @@ const Dashboard = () => {
         }
     }
 
+    //Si l'utilisateur n'est pas connecté
+    const filterValue = ['allowed', '=', true];
+    //Si l'utilisateur est connecté
+    //const filterValue = [['allowed', '=', true], ['myCrypto', '=', true]];
 
     return (
         <div>
             <DataGrid
                 id="gridContainer"
                 dataSource={data}
+                defaultFilterValue={filterValue}
                 showBorders={true}
                 repaintChangesOnly={true}
                 highlightChanges={true}
                 onRowClick={rowClick}
             >
                 <Column dataField="id" width={0} />
-                <Column dataField="image" caption="" width={40} allowSorting={false} cellRender={ImageCell} />
+                <Column dataField="allowed" width={0} />
+                <Column dataField="myCrypto" width={0} />
+                <Column dataField="image" caption="" width={40} allowSorting={false} cellRender={ImageCell}/>
                 <Column dataField="name" width={100} />
                 <Column dataField="current_price" caption="Price" format="#0.####" dataType="number" />
                 {/* <Column dataField="quote.USD.price" caption="µChange" dataType="number" width={140} format="#0.####" cellRender={ChangeCell} /> */}
