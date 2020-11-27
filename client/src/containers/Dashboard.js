@@ -19,40 +19,18 @@ const Dashboard = () => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        //with the real API
-        // axios.get('http://localhost:5000/api')
-        //   .then(response => {
-        //     console.log(response.data);
-        //     setMessage(response.data.message)
-        //   })
-
-        //With MSWJS actived
-
-        console.log(axios.defaults);
-
-        axios.get('/users/profile')
+        axios.get('/cryptos')
             .then(response => {
-                console.log(response.data);
+                setData(response.data);
             })
-
-        // axios.get('/users/profile')
-        //     .then(response => {
-        //         console.log(response.data);
-        //     })
-        // axios.get('http://localhost:5000/crypto')
-        //     .then(response => {
-        //         setData(response.data);
-        //     })
     }, []);
 
     function rowClick(e) {
-        console.log(e);
         if (e.rowType === "data") {
             history.push({
                 pathname: '/cryptocurrency',
                 state: { cryptoId: e.component.getKeyByRowIndex(e.rowIndex).id } //this.props.location.state.detail
             })
-            console.log();
         }
     }
 

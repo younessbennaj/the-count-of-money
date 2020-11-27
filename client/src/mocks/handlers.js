@@ -74,7 +74,7 @@ export const handlers = [
             }),
         )
     }),
-    rest.get('/crypto/bitcoin', (req, res, ctx) => {
+    rest.get('/cryptos/bitcoin', (req, res, ctx) => {
         return res(
             ctx.status(200),
             ctx.json(
@@ -159,7 +159,7 @@ export const handlers = [
             ),
         )
     }),
-    rest.get('/crypto', (req, res, ctx) => {
+    rest.get('/cryptos', (req, res, ctx) => {
         return res(
             ctx.status(200),
             ctx.json(
