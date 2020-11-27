@@ -12,6 +12,7 @@ import { withLayout } from "./hoc/Layout";
 
 //Import containers 
 import Dashboard from "./containers/Dashboard";
+import Cryptocurrency from "./containers/Cryptocurrency";
 import News from "./containers/News";
 import Article from "./containers/Article";
 import Authentication from "./containers/Authentication";
@@ -24,6 +25,7 @@ function App() {
 
   //Return page component with identical layout wrapper
   const DashboardWithLayout = withLayout(Dashboard);
+  const CryptocurrencyWithLayout = withLayout(Cryptocurrency);
   const NewsWithLayout = withLayout(News);
   const ArticleWithLayout = withLayout(Article);
 
@@ -50,6 +52,11 @@ function App() {
           {/* Dashboard Route */}
           <Route path="/" exact>
             <DashboardWithLayout title="Dashboard" />
+          </Route>
+
+          {/* Article Route */}
+          <Route path="/cryptocurrency" exact>
+            <CryptocurrencyWithLayout title="Cryptocurrency" backTo="/"/>
           </Route>
 
           {/* Authentication Route */}

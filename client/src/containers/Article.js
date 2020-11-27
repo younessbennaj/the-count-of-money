@@ -27,18 +27,18 @@ const Article = ({ ArticleId }) => {
     }, []);
 
     return (
-        <div class="flex flex-wrap max-w-5xl mx-auto">
-            <div class="w-full flex flex-col p-2">
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden flex-1 flex flex-col">
-                    <img class="bg-auto" src={article.urlToImage}></img>
-                    <p class="p-4">{Moment(article.publishedAt).format('d MMMM y')}</p>
-                    <div class="p-4 flex-1 flex flex-col">
-                        <h3 class="mb-4 text-xl">{article.title}</h3>
-                        <div class="mb-4 text-grey-darker text-sm flex-1">
+        <div className="flex flex-wrap max-w-5xl mx-auto">
+            <div className="w-full flex flex-col p-2">
+                <div className="bg-white rounded-lg shadow-lg overflow-hidden flex-1 flex flex-col">
+                    <img className="bg-auto" src={article.urlToImage} alt=""></img>
+                    <p className="p-4">{Moment(article.publishedAt).format('d MMMM y')}</p>
+                    <div className="p-4 flex-1 flex flex-col">
+                        <h3 className="mb-4 text-xl">{article.title}</h3>
+                        <div className="mb-4 text-grey-darker text-sm flex-1">
                             <p>{article.content}</p>
                         </div>
-                        <a href={article.url} class="border-t border-grey-light pt-2 text-xs text-blue hover:text-red uppercase no-underline tracking-wide">Nom de la source</a>
-                        <p class="text-xs">{article.author}</p>
+                        <a href={article.url} className="border-t border-grey-light pt-2 text-xs text-blue hover:text-red uppercase no-underline tracking-wide">Nom de la source</a>
+                        <p className="text-xs">{article.author}</p>
                     </div>
                 </div>  
             </div>
