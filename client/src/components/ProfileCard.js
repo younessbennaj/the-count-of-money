@@ -13,28 +13,49 @@ const ProfileCard = ({ credentials, setIsEditMode }) => {
     return (
         <>
             {credentials &&
-                <div className="profile-card">
-                    <button onClick={handleEditModeClick}>Edit</button>
-                    <h2>{credentials.username}</h2>
-                    <p>{credentials.currency}</p>
-                    <ul className="profile-card__chips-list">
-                        {credentials.cryptocurrencies.map(crypto => {
-                            return (
-                                <li key={crypto} className="profile-card__chips-item">
-                                    <span>{crypto}</span>
-                                </li>
-                            )
-                        })}
-                    </ul>
-                    <ul className="profile-card__chips-list">
-                        {credentials.tags.map(tag => {
-                            return (
-                                <li key={tag} className="profile-card__chips-item">
-                                    <span>{tag}</span>
-                                </li>
-                            )
-                        })}
-                    </ul>
+                <div className="border border-gray-500 rounded-lg p-7 box-border">
+                    <div className="flex flex-row justify-between items-center py-5">
+                        <p className="text-3xl">Profile</p>
+                        <button
+                            onClick={handleEditModeClick}
+                            className="py-2 px-4 rounded-md text-gray-500 text-lg border-gray-500 border"
+                        >Edit
+                        </button>
+                    </div>
+
+                    <div>
+                        <span className="uppercase text-gray-400 text-xs">username</span>
+                        <p className="text-xl my-2">{credentials.username}</p>
+                    </div>
+                    <div>
+                        <span className="uppercase text-gray-400 text-xs">default currency</span>
+                        <p className="text-xl my-2">{credentials.currency}</p>
+                    </div>
+
+                    <div>
+                        <p className="text-2xl my-4">Your cryptocurrencies preferences</p>
+                        <ul className="">
+                            {credentials.cryptocurrencies.map(crypto => {
+                                return (
+                                    <li key={crypto} className="inline-block">
+                                        <span className="bg-blue-200 rounded-lg px-3 py-2 inline-block m-1 text-blue-700">{crypto}</span>
+                                    </li>
+                                )
+                            })}
+                        </ul>
+                    </div>
+                    <div>
+                        <p className="text-2xl my-4">Your news preferences</p>
+                        <ul className="profile-card__chips-list">
+                            {credentials.tags.map(tag => {
+                                return (
+                                    <li key={tag} className="inline-block">
+                                        <span className="bg-blue-200 rounded-lg px-2 py-2 inline-block mx-1 text-blue-700">#{tag}</span>
+                                    </li>
+                                )
+                            })}
+                        </ul>
+                    </div>
                 </div>
             }
         </>
