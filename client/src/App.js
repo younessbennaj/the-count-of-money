@@ -10,6 +10,9 @@ import {
 //Layout HOC
 import { withLayout } from "./hoc/Layout";
 
+//Protected Route HOC
+import { PrivateRoute } from "./hoc/PrivateRoute";
+
 //Auth Hook
 import { UserContextProvider } from "./hooks/use-auth";
 
@@ -77,9 +80,9 @@ function App() {
             </Route>
 
             {/* Profile Route */}
-            <Route path="/profile" exact>
+            <PrivateRoute path="/profile" exact>
               <ProfileWithLayout title="Profile" />
-            </Route>
+            </PrivateRoute>
           </Switch>
         </div>
       </UserContextProvider>
