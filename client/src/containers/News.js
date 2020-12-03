@@ -12,18 +12,12 @@ const News = () => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        //with the real API
-        // axios.get('http://localhost:5000/api')
-        //   .then(response => {
-        //     console.log(response.data);
-        //     setMessage(response.data.message)
-        //   })
 
         //With MSWJS actived
         axios.get('/articles')
-        .then(response => {
-            setData(response.data);
-        })
+            .then(response => {
+                setData(response.data);
+            })
     }, []);
 
     return (

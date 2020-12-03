@@ -45,14 +45,12 @@ function useProvideAuth() {
     const signout = (cb) => {
         logoutUser().then(() => {
             setUser(null);
-            console.log("sucessfuly signed out");
             //sucessfuly signed out
             cb();
         });
     }
 
     const isAuth = () => {
-        console.log(user);
         //return a boolean to check if the user is logged in
         return !!sessionStorage.getItem('jwt') && !!user;
     }

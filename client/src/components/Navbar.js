@@ -22,10 +22,8 @@ const Navbar = () => {
     function logout(e) {
         e.preventDefault();
         signout(() => {
-            console.log('redirect to the home page');
             history.push("/");
         })
-        // logoutUser(() => history.push("/")));
     }
 
     return (
