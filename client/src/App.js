@@ -10,6 +10,12 @@ import {
 //Layout HOC
 import { withLayout } from "./hoc/Layout";
 
+//Protected Route HOC
+import { PrivateRoute } from "./hoc/PrivateRoute";
+
+//Auth Hook
+import { AuthContextProvider } from "./hooks/use-auth";
+
 //Import containers 
 import Dashboard from "./containers/Dashboard";
 import Cryptocurrency from "./containers/Cryptocurrency";
@@ -43,45 +49,43 @@ function App() {
   }, []);
   return (
     <Router>
-      <div>
-        <Navbar />
+      <AuthContextProvider>
+        <div>
+          <Navbar />
+          <Switch>
+            {/* Dashboard Route */}
+            <Route path="/" exact>
+              <DashboardWithLayout title="Dashboard" />
+            </Route>
 
+            {/* Article Route */}
+            <Route path="/cryptocurrency" exact>
+              <CryptocurrencyWithLayout title="Cryptocurrency" backTo="/" />
+            </Route>
 
+            {/* Authentication Route */}
+            {/* Nested routes => no "exact" */}
+            <Route path="/authentication">
+              <AuthenticationWithLayout title="Authentication" />
+            </Route>
 
-        <Switch>
-          {/* Dashboard Route */}
-          <Route path="/" exact>
-            <DashboardWithLayout title="Dashboard" />
-          </Route>
+            {/* Articles Route */}
+            <Route path="/articles" exact>
+              <NewsWithLayout title="News" />
+            </Route>
 
-          {/* Article Route */}
-          <Route path="/cryptocurrency" exact>
-            <CryptocurrencyWithLayout title="Cryptocurrency" backTo="/"/>
-          </Route>
+            {/* Article Route */}
+            <Route path="/article" exact>
+              <ArticleWithLayout title="Article" backTo="/articles" />
+            </Route>
 
-          {/* Authentication Route */}
-          {/* Nested routes => no "exact" */}
-          <Route path="/authentication">
-            <AuthenticationWithLayout title="Authentication" />
-          </Route>
-
-          {/* Articles Route */}
-          <Route path="/articles" exact>
-            <NewsWithLayout title="News" />
-          </Route>
-
-          {/* Article Route */}
-          <Route path="/article" exact>
-            <ArticleWithLayout title="Article" backTo="/articles" />
-          </Route>
-
-
-          {/* Profile Route */}
-          <Route path="/profile" exact>
-            <ProfileWithLayout title="Profile" />
-          </Route>
-        </Switch>
-      </div>
+            {/* Profile Route */}
+            <PrivateRoute path="/profile" exact>
+              <ProfileWithLayout title="Profile" />
+            </PrivateRoute>
+          </Switch>
+        </div>
+      </AuthContextProvider>
     </Router>
   );
 }

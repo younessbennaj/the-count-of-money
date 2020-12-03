@@ -42,7 +42,6 @@ const Profile = () => {
     const [state, dispatch] = useReducer(reducer, { cryptocurrencies: [], tags: [] });
 
     useEffect(() => {
-        console.log(axios.defaults);
         axios.get("/users/profile")
             .then(response => {
 
