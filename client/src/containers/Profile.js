@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import axios from "axios";
 
+//Auth hook 
+import { useUserContext } from "../hooks/use-auth";
+
 //import component here 
 import ProfileCard from '../components/ProfileCard';
 import ProfileForm from '../components/ProfileForm';
@@ -35,6 +38,10 @@ function reducer(state, action) {
 }
 const Profile = () => {
 
+    const user = useUserContext();
+
+    console.log(user);
+
     //boolean to know if we are in edit mode or not
     const [isEditMode, setIsEditMode] = useState(false);
 
@@ -42,7 +49,6 @@ const Profile = () => {
     const [state, dispatch] = useReducer(reducer, { cryptocurrencies: [], tags: [] });
 
     useEffect(() => {
-        console.log(axios.defaults);
         axios.get("/users/profile")
             .then(response => {
 

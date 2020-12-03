@@ -6,10 +6,7 @@ export const authenticateUser = ({ email: mail, password }, type) => {
     //So, instead of two separated method, I use one with a "type" parameters 
     //"type" can be "register" or "login", and we use this variable in a dyamic string that describes the route
 
-
     const data = JSON.stringify({ mail, password });
-
-    console.log(data);
 
     var config = {
         method: 'post',
