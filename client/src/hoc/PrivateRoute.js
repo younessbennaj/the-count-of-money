@@ -9,21 +9,21 @@
 import { Redirect, Route } from "react-router-dom";
 
 //Auth hook 
-import { useUserContext } from "../hooks/use-auth";
+import { useAuthContext } from "../hooks/use-auth";
 
 export function PrivateRoute({ children, path }) {
 
-    const user = useUserContext();
-
     //Boolean that tell us if the user is authenticated
-    // const isAuth = !!sessionStorage.getItem('jwt') && !!user;
-    const isAuth = false;
+    const { isAuth } = useAuthContext();
 
-    console.log('PRIVATE ROUTE', isAuth);
+    // console.log(isAuth);
+
+
+    console.log('PRIVATE ROUTE', isAuth());
 
     return (
         <Route path={path}>
-            {isAuth ?
+            {isAuth() ?
                 children :
                 <Redirect
                     to={{

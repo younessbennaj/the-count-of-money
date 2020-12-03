@@ -14,7 +14,7 @@ import { withLayout } from "./hoc/Layout";
 import { PrivateRoute } from "./hoc/PrivateRoute";
 
 //Auth Hook
-import { UserContextProvider } from "./hooks/use-auth";
+import { AuthContextProvider } from "./hooks/use-auth";
 
 //Import containers 
 import Dashboard from "./containers/Dashboard";
@@ -49,7 +49,7 @@ function App() {
   }, []);
   return (
     <Router>
-      <UserContextProvider>
+      <AuthContextProvider>
         <div>
           <Navbar />
           <Switch>
@@ -85,7 +85,7 @@ function App() {
             </PrivateRoute>
           </Switch>
         </div>
-      </UserContextProvider>
+      </AuthContextProvider>
     </Router>
   );
 }

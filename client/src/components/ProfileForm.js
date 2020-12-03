@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+//Hook to handle user authentification
+import {useAuthContext} from "../hooks/use-auth";
+
 const UIChips = ({item, defaultChecked}) => {
     return (
         <label htmlFor={item} className="chips">

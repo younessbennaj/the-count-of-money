@@ -1,10 +1,14 @@
 //React Router 
 import {
+    useHistory,
     useRouteMatch
 } from "react-router-dom";
 
 //Formik
 import { Formik, Form, Field } from 'formik';
+
+//Hook to handle user authentification
+import { useAuthContext } from "../hooks/use-auth";
 
 //Import components 
 import ErrorMessage from "./ErrorMessage";
@@ -15,7 +19,12 @@ import { AuthenticationSchema } from "../utils/schemas";
 
 const Login = () => {
 
+    let history = useHistory();
+
     let { path } = useRouteMatch();
+
+    // Auth Hook => get the signin method to authenticate the user
+    const { signin } = useAuthContext();
 
     return (
         <div className="max-w-md w-full space-y-8">
@@ -28,7 +37,11 @@ const Login = () => {
                 validationSchema={AuthenticationSchema}
                 onSubmit={credentials => {
                     //In authencateUser we need to specify if it's a registration or the user just want to signin
-                    authenticateUser(credentials, 'login');
+                    // authenticateUser(credentials, 'login');
+                    signin(credentials, 'login', () => {
+                        //Redirect to the home page when user is logged in
+                        history.push("/");
+                    });
                 }}
             >
                 {({ errors, touched }) => (
