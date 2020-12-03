@@ -11,6 +11,10 @@ var ObjectId = require('mongodb').ObjectID;
 const session = require('express-session');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const strategy = require("passport-facebook");
+const FacebookStrategy = strategy.Strategy;
+
+
 const GOOGLE_CLIENT_ID = '10402001941-iplgmi34fo8q4eg3elq114cfklp41u65.apps.googleusercontent.com';
 const GOOGLE_CLIENT_SECRET = 'R7ZqmUbsOmdKIl0VmqWqZigG';
 const cryptocompare = require('cryptocompare')
@@ -30,6 +34,7 @@ app.use(passport.session());
 
 cryptocompare.setApiKey('76f92e58e8c5bd548cc681f6707d99c5833d55072daef8c5d0ee99721b6f60b9')
 
+
 passport.serializeUser(function (user, cb) {
   cb(null, user);
 });
@@ -44,6 +49,15 @@ app.use(session({
   secret: 'SECRET'
 }));
 
+passport.use(new FacebookStrategy({
+  clientID: "198425565195082",
+  clientSecret: "76021f6d915ab91d1b517a2cc76ba0d6",
+  callbackURL: "http://localhost:5000/users/auth/facebook/callback",
+  profileFields: ['id', 'displayName', 'emails']
+}, function (accessToken, refreshToken, profile, done) {
+  return done(null, profile);
+}
+));
 
 passport.use(new GoogleStrategy({
   clientID: GOOGLE_CLIENT_ID,
@@ -56,10 +70,12 @@ passport.use(new GoogleStrategy({
   }
 ));
 
-// var checkCoinGecko = async () => {
-//   let data = await CoinGeckoClient.ping()
-//   return (data.code)
-// }
+function ownMiddleware(req, res, next) {
+  global.provider = req.params.provider;
+  passport.authenticate(global.provider)
+  next()
+}
+//
 
 app.listen(5000, function () {
   console.log('NodeJs is running on localhost:5000 !')
@@ -117,7 +133,7 @@ app.post('/users/register', (req, res) => {
     let mail = req.body.mail
     let password = req.body.password
     if (password == "" || mail == "") {
-      res.status(400).end(JSON.stringify({ message: "Mail or password can not be null" }));
+      res.status(400).end(JSON.stringify({ message: "Mail or password cannot be null" }));
     }
     db.get().collection("users").find({ mail }).toArray(function (err, result) {
       if (err) throw err;
@@ -443,56 +459,65 @@ app.get('/cryptos/:cmid', (req, res) => {
   }
 });
 
+app.get('/users/auth/:provider', function (req, res) {
+  if (req.params.provider === "google") {
+    passport.authenticate("google", { scope: ['profile', 'email'] })(req, res);
+  } else if (req.params.provider === "facebook") {
+    passport.authenticate("facebook", { scope: ['email'] })(req, res);
+  } else {
+    res.status(400).end(JSON.stringify({ message: "Provider not define" }));
+  }
+});
 
-app.get('/users/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
-
-app.get('/users/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/error' }),
-  function (req, res) {
-    let mail = res.req.user.emails[0].value;
-    let nickname = res.req.user.displayName;
-    let password = res.req.user.id;
-    let JsonObj = {};
-    db.get().collection("users").find({ $or: [{ nickname }, { mail }] }).toArray(function (err, result) {
-      if (result.length === 0) {
-        bcrypt.hash(password, 10, function (err, hash) {
-          let newUser = { "body": {} };
-          newUser.body.mail = mail;
-          newUser.body.password = hash;
-          newUser.body.nickname = nickname;
-          newUser.body.currencies = "eur";
-          newUser.body.listCrypto = [];
-          newUser.body.listWeb = [];
-          newUser.body.right = 0;
-          db.get().collection("users").insertOne(newUser.body, function (err, ress) {
-            if (err) throw err;
-            db.get().collection("users").find({ $or: [{ nickname }, { mail }] }).toArray(function (err, result) {
-              if (bcrypt.compareSync(password, result[0].password)) {
-                const token = jwt.sign(
-                  { userId: result[0]._id },
-                  'RANDOM_TOKEN_SECRET',
-                  { expiresIn: '24h' });
-                JsonObj = {
-                  jwt: token
-                };
-                res.status(200).send(JsonObj);
-              }
-            });
+app.get("/users/auth/:provider/callback", ownMiddleware, (req, res, next) => {
+  passport.authenticate(global.provider, { scope: ['email'] })(req, res, next);
+}, (req, res) => {
+  let mail = res.req.user.emails[0].value;
+  console.log(mail)
+  let nickname = res.req.user.displayName;
+  let password = res.req.user.id;
+  let JsonObj = {};
+  db.get().collection("users").find({ $or: [{ nickname }, { mail }] }).toArray(function (err, result) {
+    console.log();
+    if (result.length === 0) {
+      bcrypt.hash(password, 10, function (err, hash) {
+        let newUser = { "body": {} };
+        newUser.body.mail = mail;
+        newUser.body.password = hash;
+        newUser.body.nickname = nickname;
+        newUser.body.currencies = "eur";
+        newUser.body.listCrypto = [];
+        newUser.body.listWeb = [];
+        newUser.body.right = 0;
+        db.get().collection("users").insertOne(newUser.body, function (err, ress) {
+          if (err) throw err;
+          db.get().collection("users").find({ $or: [{ nickname }, { mail }] }).toArray(function (err, result) {
+            if (bcrypt.compareSync(password, result[0].password)) {
+              const token = jwt.sign(
+                { userId: result[0]._id },
+                'RANDOM_TOKEN_SECRET',
+                { expiresIn: '24h' });
+              JsonObj = {
+                jwt: token
+              };
+              res.status(200).send(JsonObj);
+            }
           });
         });
+      });
+    } else {
+      if (bcrypt.compareSync(password, result[0].password)) {
+        const token = jwt.sign(
+          { userId: result[0]._id },
+          'RANDOM_TOKEN_SECRET',
+          { expiresIn: '24h' });
+        JsonObj = {
+          jwt: token
+        };
+        res.status(200).send(JsonObj);
       } else {
-        if (bcrypt.compareSync(password, result[0].password)) {
-          const token = jwt.sign(
-            { userId: result[0]._id },
-            'RANDOM_TOKEN_SECRET',
-            { expiresIn: '24h' });
-          JsonObj = {
-            jwt: token
-          };
-          res.status(200).send(JsonObj);
-        } else {
-          res.status(400).end(JSON.stringify({ message: "Email already used on the site please connect without google" }));
-        }
+        res.status(400).end(JSON.stringify({ message: "Email already used on the site please connect without google" }));
       }
-    });
+    }
   });
+});
