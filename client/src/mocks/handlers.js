@@ -34,8 +34,8 @@ export const handlers = [
                     "blockchain",
                     "bitcoin",
                     "cryptotrading"
-                ]
-
+                ],
+                "right": 1
             })
         )
     }),

@@ -34,10 +34,15 @@ function useProvideAuth() {
         return !!sessionStorage.getItem('jwt') && !!user;
     }
 
+    const isAdmin = () => {
+        return user ? !!user.right : null;
+    }
+
 
     return {
         user,
         isAuth,
+        isAdmin,
         signin,
         signout
     };

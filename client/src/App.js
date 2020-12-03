@@ -11,7 +11,7 @@ import {
 import { withLayout } from "./hoc/Layout";
 
 //Protected Route HOC
-import { PrivateRoute } from "./hoc/PrivateRoute";
+import { PrivateRoute, AdminRoute } from "./hoc/PrivateRoute";
 
 //Auth Hook
 import { AuthContextProvider } from "./hooks/use-auth";
@@ -23,6 +23,7 @@ import News from "./containers/News";
 import Article from "./containers/Article";
 import Authentication from "./containers/Authentication";
 import Profile from "./containers/Profile";
+import Settings from "./containers/Settings";
 
 //Import components
 import Navbar from "./components/Navbar";
@@ -38,6 +39,8 @@ function App() {
   const AuthenticationWithLayout = withLayout(Authentication);
 
   const ProfileWithLayout = withLayout(Profile);
+
+  const SettingsWithLayout = withLayout(Settings);
 
   useEffect(() => {
     //with the real API
@@ -83,6 +86,10 @@ function App() {
             <PrivateRoute path="/profile" exact>
               <ProfileWithLayout title="Profile" />
             </PrivateRoute>
+
+            <AdminRoute path="/settings" exact>
+              <SettingsWithLayout title="Settings" />
+            </AdminRoute>
           </Switch>
         </div>
       </AuthContextProvider>
