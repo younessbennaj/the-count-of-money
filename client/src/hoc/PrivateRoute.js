@@ -6,7 +6,7 @@
         - The user isn't authenticated: we render another UI for unauthenticated user or redirect to another route path
 /*/
 
-import { Route } from "react-router-dom";
+import { Redirect, Route } from "react-router-dom";
 
 //Auth hook 
 import { useUserContext } from "../hooks/use-auth";
@@ -23,7 +23,13 @@ export function PrivateRoute({ children, path }) {
 
     return (
         <Route path={path}>
-            {isAuth ? children : <h2>Unauthenticated</h2>}
+            {isAuth ?
+                children :
+                <Redirect
+                    to={{
+                        pathname: "/authentication/login"
+                    }}
+                />}
         </Route>
     )
 }

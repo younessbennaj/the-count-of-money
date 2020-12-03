@@ -40,8 +40,6 @@ const Profile = () => {
 
     const user = useUserContext();
 
-    console.log(user);
-
     //boolean to know if we are in edit mode or not
     const [isEditMode, setIsEditMode] = useState(false);
 
