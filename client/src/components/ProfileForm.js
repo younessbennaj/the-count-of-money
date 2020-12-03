@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-//Hook to handle user authentification
-import {useAuthContext} from "../hooks/use-auth";
-
 const UIChips = ({item, defaultChecked}) => {
     return (
         <label htmlFor={item} className="chips">
@@ -138,11 +135,8 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
 
         var data = JSON.stringify(userCredentials);
 
-        console.log(data);
-
         axios.put('/users/profile', data) 
             .then(response => {
-                console.log(response);
                 //Leave the edit mode and return to the profile card
                 setIsEditMode(false)
             })

@@ -18,7 +18,9 @@ import "../index.css";
 const Dashboard = () => {
 
     //Get user auth state
-    const { isAuth } = useAuthContext();
+    const auth = useAuthContext();
+
+    const isAuth = auth.isAuth();
 
 
     const history = useHistory();
@@ -30,7 +32,7 @@ const Dashboard = () => {
             .then(response => {
                 setData(response.data);
             })
-    }, [isAuth()]); //If the user auth state change, then re fetch cryptos information
+    }, [isAuth]); //If the user auth state change, then re fetch cryptos information
 
     function rowClick(e) {
         if (e.rowType === "data") {

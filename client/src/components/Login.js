@@ -1,4 +1,4 @@
-//React Router 
+//React Router
 import {
     useHistory,
     useRouteMatch
@@ -10,11 +10,10 @@ import { Formik, Form, Field } from 'formik';
 //Hook to handle user authentification
 import { useAuthContext } from "../hooks/use-auth";
 
-//Import components 
+//Import components
 import ErrorMessage from "./ErrorMessage";
 
 //Utils
-import { authenticateUser } from "../utils/auth";
 import { AuthenticationSchema } from "../utils/schemas";
 
 const Login = () => {

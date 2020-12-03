@@ -16,11 +16,6 @@ export function PrivateRoute({ children, path }) {
     //Boolean that tell us if the user is authenticated
     const { isAuth } = useAuthContext();
 
-    // console.log(isAuth);
-
-
-    console.log('PRIVATE ROUTE', isAuth());
-
     return (
         <Route path={path}>
             {isAuth() ?

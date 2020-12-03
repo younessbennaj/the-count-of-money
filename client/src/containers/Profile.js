@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import axios from "axios";
 
-//Auth hook 
-import { useAuthContext } from "../hooks/use-auth";
-
 //import component here 
 import ProfileCard from '../components/ProfileCard';
 import ProfileForm from '../components/ProfileForm';
@@ -37,8 +34,6 @@ function reducer(state, action) {
     }
 }
 const Profile = () => {
-
-    const auth = useAuthContext();
 
     //boolean to know if we are in edit mode or not
     const [isEditMode, setIsEditMode] = useState(false);

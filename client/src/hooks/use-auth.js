@@ -3,28 +3,7 @@ import React, { useContext, useState } from 'react';
 import { authenticateUser, logoutUser, getUserCredentials } from "../utils/auth";
 
 //Use a context to pass the authenticated user through the components tree 
-
 export const authContext = React.createContext(null);
-
-//Mock user data from API
-const userModel = {
-    mail: "john.doe@email.com",
-    nickname: "johndoe",
-    currencies: "EUR",
-    listCrypto: [
-        "Bitcoin",
-        "Ethereum",
-        "XRP",
-        "Tether",
-        "BitcoinCash"
-    ],
-    listWeb: [
-        "blockchain",
-        "bitcoin",
-        "cryptotrading"
-    ]
-
-};
 
 function useProvideAuth() {
     const [user, setUser] = useState(null);
