@@ -33,7 +33,6 @@ const Dashboard = () => {
                 setData(response.data);
             })
     }, [isAuth]); //If the user auth state change, then re fetch cryptos information
-
     function rowClick(e) {
         if (e.rowType === "data") {
             history.push({

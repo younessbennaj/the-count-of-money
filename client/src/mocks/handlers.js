@@ -165,22 +165,192 @@ export const handlers = [
             ctx.json(
                 [
                     {
+                        "id": "bitcoin",
+                        "name": "Bitcoin",
+                        "current_price": 15918.21,
+                        "high_24h": 16101.3,
+                        "low_24h": 15772.68,
+                        "image": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
+                        "allowed": false,
+                        "myCrypto": false
+                    },
+                    {
                         "id": "ethereum",
                         "name": "Ethereum",
-                        "current_price": 421.59,
-                        "high_24h": 505.4,
-                        "low_24h": 412.04,
+                        "current_price": 500.59,
+                        "high_24h": 511.36,
+                        "low_24h": 495.88,
                         "image": "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1595348880",
                         "allowed": true,
                         "myCrypto": false
                     },
                     {
+                        "id": "ripple",
+                        "name": "XRP",
+                        "current_price": 0.509069,
+                        "high_24h": 0.526228,
+                        "low_24h": 0.503837,
+                        "image": "https://assets.coingecko.com/coins/images/44/large/xrp-symbol-white-128.png?1605778731",
+                        "allowed": false,
+                        "myCrypto": false
+                    },
+                    {
                         "id": "tether",
                         "name": "Tether",
-                        "current_price": 0.843038,
-                        "high_24h": 0.84733,
-                        "low_24h": 0.832405,
+                        "current_price": 0.822601,
+                        "high_24h": 0.828638,
+                        "low_24h": 0.822157,
                         "image": "https://assets.coingecko.com/coins/images/325/large/Tether-logo.png?1598003707",
+                        "allowed": true,
+                        "myCrypto": false
+                    },
+                    {
+                        "id": "litecoin",
+                        "name": "Litecoin",
+                        "current_price": 72.13,
+                        "high_24h": 74.61,
+                        "low_24h": 71.33,
+                        "image": "https://assets.coingecko.com/coins/images/2/large/litecoin.png?1547033580",
+                        "allowed": false,
+                        "myCrypto": false
+                    },
+                    {
+                        "id": "bitcoin-cash",
+                        "name": "Bitcoin Cash",
+                        "current_price": 245.94,
+                        "high_24h": 250.69,
+                        "low_24h": 234.94,
+                        "image": "https://assets.coingecko.com/coins/images/780/large/bitcoin-cash-circle.png?1594689492",
+                        "allowed": true,
+                        "myCrypto": true
+                    },
+                    {
+                        "id": "chainlink",
+                        "name": "Chainlink",
+                        "current_price": 11.3,
+                        "high_24h": 11.67,
+                        "low_24h": 11.17,
+                        "image": "https://assets.coingecko.com/coins/images/877/large/chainlink-new-logo.png?1547034700",
+                        "allowed": false,
+                        "myCrypto": false
+                    },
+                    {
+                        "id": "cardano",
+                        "name": "Cardano",
+                        "current_price": 0.132283,
+                        "high_24h": 0.137181,
+                        "low_24h": 0.130472,
+                        "image": "https://assets.coingecko.com/coins/images/975/large/cardano.png?1547034860",
+                        "allowed": true,
+                        "myCrypto": true
+                    },
+                    {
+                        "id": "polkadot",
+                        "name": "Polkadot",
+                        "current_price": 4.37,
+                        "high_24h": 4.58,
+                        "low_24h": 4.29,
+                        "image": "https://assets.coingecko.com/coins/images/12171/large/aJGBjJFU_400x400.jpg?1597804776",
+                        "allowed": true,
+                        "myCrypto": true
+                    },
+                    {
+                        "id": "binancecoin",
+                        "name": "Binance Coin",
+                        "current_price": 24.95,
+                        "high_24h": 25.59,
+                        "low_24h": 24.88,
+                        "image": "https://assets.coingecko.com/coins/images/825/large/binance-coin-logo.png?1547034615",
+                        "allowed": false,
+                        "myCrypto": false
+                    },
+                    {
+                        "id": "stellar",
+                        "name": "Stellar",
+                        "current_price": 0.151164,
+                        "high_24h": 0.155873,
+                        "low_24h": 0.14932,
+                        "image": "https://assets.coingecko.com/coins/images/100/large/Stellar_symbol_black_RGB.png?1552356157",
+                        "allowed": false,
+                        "myCrypto": false
+                    },
+                    {
+                        "id": "bitcoin-cash-sv",
+                        "name": "Bitcoin SV",
+                        "current_price": 154.63,
+                        "high_24h": 160.9,
+                        "low_24h": 138.55,
+                        "image": "https://assets.coingecko.com/coins/images/6799/large/BSV.png?1558947902",
+                        "allowed": false,
+                        "myCrypto": false
+                    },
+                    {
+                        "id": "usd-coin",
+                        "name": "USD Coin",
+                        "current_price": 0.821794,
+                        "high_24h": 0.827623,
+                        "low_24h": 0.81797,
+                        "image": "https://assets.coingecko.com/coins/images/6319/large/USD_Coin_icon.png?1547042389",
+                        "allowed": true,
+                        "myCrypto": false
+                    },
+                    {
+                        "id": "eos",
+                        "name": "EOS",
+                        "current_price": 2.55,
+                        "high_24h": 2.58,
+                        "low_24h": 2.49,
+                        "image": "https://assets.coingecko.com/coins/images/738/large/eos-eos-logo.png?1547034481",
+                        "allowed": false,
+                        "myCrypto": false
+                    },
+                    {
+                        "id": "monero",
+                        "name": "Monero",
+                        "current_price": 110.89,
+                        "high_24h": 111.44,
+                        "low_24h": 105.87,
+                        "image": "https://assets.coingecko.com/coins/images/69/large/monero_logo.png?1547033729",
+                        "allowed": false,
+                        "myCrypto": false
+                    },
+                    {
+                        "id": "wrapped-bitcoin",
+                        "name": "Wrapped Bitcoin",
+                        "current_price": 15916.62,
+                        "high_24h": 16098.95,
+                        "low_24h": 15786.88,
+                        "image": "https://assets.coingecko.com/coins/images/7598/large/wrapped_bitcoin_wbtc.png?1548822744",
+                        "allowed": false,
+                        "myCrypto": false
+                    },
+                    {
+                        "id": "tron",
+                        "name": "TRON",
+                        "current_price": 0.02590603,
+                        "high_24h": 0.02635188,
+                        "low_24h": 0.02542265,
+                        "image": "https://assets.coingecko.com/coins/images/1094/large/tron-logo.png?1547035066",
+                        "allowed": false,
+                        "myCrypto": false
+                    },
+                    {
+                        "id": "nem",
+                        "name": "NEM",
+                        "current_price": 0.201659,
+                        "high_24h": 0.209891,
+                        "low_24h": 0.170844,
+                        "image": "https://assets.coingecko.com/coins/images/242/large/NEM_Logo_256x256.png?1598687029",
+                        "allowed": true,
+                        "myCrypto": false
+                    },
+                    {
+                        "id": "tezos",
+                        "name": "Tezos",
+                        "current_price": 1.98,
+                        "high_24h": 2.02,
+                        "low_24h": 1.92,
+                        "image": "https://assets.coingecko.com/coins/images/976/large/Tezos-logo.png?1547034862",
                         "allowed": true,
                         "myCrypto": false
                     }

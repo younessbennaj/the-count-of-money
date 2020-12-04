@@ -87,9 +87,12 @@ function App() {
               <ProfileWithLayout title="Profile" />
             </PrivateRoute>
 
-            <AdminRoute path="/settings" exact>
+            {/* <AdminRoute path="/settings" exact>
               <SettingsWithLayout title="Settings" />
-            </AdminRoute>
+            </AdminRoute> */}
+            <Route path="/settings" exact>
+              <SettingsWithLayout title="Settings" />
+            </Route>
           </Switch>
         </div>
       </AuthContextProvider>

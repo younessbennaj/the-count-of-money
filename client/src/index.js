@@ -9,7 +9,6 @@ import './style.css';
 //Components
 import App from './App';
 
-
 //If you want to work with the Mock API
 if (process.env.REACT_APP_API_CONFIG === 'development') {
   console.log('You work with the developement API using mock data (fake)');
@@ -22,6 +21,9 @@ if (process.env.REACT_APP_API_CONFIG === 'development') {
 
   //We set the baseURL of our API
   axios.defaults.baseURL = 'http://localhost:5000'
+
+  // if(sessionStorage.getItem('jwt'))
+
 
 
 

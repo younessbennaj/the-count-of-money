@@ -21,6 +21,13 @@ function useProvideAuth() {
         });
     };
 
+    const getUser = () => {
+        getUserCredentials(credentials => {
+            //we get the user credentials
+            setUser(credentials);
+        })
+    }
+
     const signout = (cb) => {
         logoutUser().then(() => {
             setUser(null);
@@ -31,7 +38,7 @@ function useProvideAuth() {
 
     const isAuth = () => {
         //return a boolean to check if the user is logged in
-        return !!sessionStorage.getItem('jwt') && !!user;
+        return !!sessionStorage.getItem('jwt');
     }
 
     const isAdmin = () => {
@@ -41,6 +48,7 @@ function useProvideAuth() {
 
     return {
         user,
+        setUser,
         isAuth,
         isAdmin,
         signin,
