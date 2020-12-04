@@ -20,7 +20,7 @@ function reducer(state, action) {
     }
 }
 
-const CryptosAutoComplete = () => {
+const CryptosAutoComplete = ({ allowedCryptos, setAllowedCryptos }) => {
     // //All the cryptos that the admin can add to the preferences
     // const [cryptos, setCryptos] = useState([]);
 
@@ -32,8 +32,6 @@ const CryptosAutoComplete = () => {
 
     //state.cryptos => All the cryptos that the admin can add to the preference
     const [state, dispatch] = useReducer(reducer, { cryptos: [] });
-
-    const [allowedCryptos, setAllowedCryptos] = useState([]);
 
     useEffect(() => {
         axios.get('/cryptos')
