@@ -14,6 +14,7 @@ const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const strategy = require("passport-facebook");
 const FacebookStrategy = strategy.Strategy;
 
+const RSSFeed = require("./rssFlux/rss.js");
 
 const GOOGLE_CLIENT_ID = '10402001941-iplgmi34fo8q4eg3elq114cfklp41u65.apps.googleusercontent.com';
 const GOOGLE_CLIENT_SECRET = 'R7ZqmUbsOmdKIl0VmqWqZigG';
@@ -93,6 +94,21 @@ db.connect(() => {
     console.log('Mongo Listening :5555');
   });
 });
+
+
+/// attention db RIP
+// setInterval(async () => {
+//   console.log(RSSFeed);
+//   const feed = new RSSFeed();
+//   await feed.init('https://cointelegraph.com/feed', ['bitcoin', 'litecoin', 'ethereum']);
+
+//   db.get()
+//     .collection('articles')
+//     .insertMany(feed.data.items, async function (err, res) {
+//       if (err) throw err;
+//       console.log('inserted');
+//     });
+// }, 5000);
 
 /*                                            Connexion                                         */
 // Connexion a l'user
@@ -194,26 +210,27 @@ app.post('/users/logout', (req, res) => {
 app.put('/users/profile', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   if (req.headers.hasOwnProperty('jwt')) {
-    jwt.verify(req.headers.jwt, 'RANDOM_TOKEN_SECRET', function (err, decoded) {
+    jwt.verify(req.headers.jwt, 'RANDOM_TOKEN_SECRET', async function (err, decoded) {
       if (err) {
         res.status(400).end(JSON.stringify({ message: "Token expired" }));
         return;
       }
-      let password = req.body.password;
-      bcrypt.hash(password, 10, function (err, hash) {
-        req.body.password = hash;
-        let data = req.body;
-        // password = hash;
-        //   const {nickname, mail, password, currencies, listCrypto, listWeb} = req.body
-        if (decoded.userId.length === 24) {
-          db.get().collection("users").updateOne({ "_id": new ObjectId(decoded.userId) }, { $set: data }, function (error, result) {
-            if (error) throw error;
-            res.status(200).end(JSON.stringify({ message: "Profile Updated" }));
+      if (req.body.hasOwnProperty('password')) {
+        await (async function () {
+          req.body.password = await new Promise(resolve => {
+            bcrypt.hash(req.body.password, 10, (err, hash) => resolve(hash));
           });
-        } else {
-          res.status(400).end(JSON.stringify({ message: "Wrong JWT" }));
-        }
-      });
+        })();
+      }
+      let data = req.body;
+      if (decoded.userId.length === 24) {
+        db.get().collection("users").updateOne({ "_id": new ObjectId(decoded.userId) }, { $set: data }, function (error, result) {
+          if (error) throw error;
+          res.status(200).end(JSON.stringify({ message: "Profile Updated" }));
+        });
+      } else {
+        res.status(400).end(JSON.stringify({ message: "Wrong JWT" }));
+      }
     });
   } else {
     res.status(400).end(JSON.stringify({ message: "Invalid request" }));
