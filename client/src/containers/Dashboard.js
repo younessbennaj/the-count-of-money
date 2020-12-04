@@ -32,6 +32,9 @@ const Dashboard = () => {
             .then(response => {
                 setData(response.data);
             })
+            .catch(error => {
+                console.log(error);
+            })
     }, [isAuth]); //If the user auth state change, then re fetch cryptos information
 
     function rowClick(e) {
@@ -59,12 +62,12 @@ const Dashboard = () => {
                 highlightChanges={true}
                 onRowClick={rowClick}
             >
-                <Column dataField="id" width={0} />
-                <Column dataField="allowed" width={0} />
-                <Column dataField="myCrypto" width={0} />
-                <Column dataField="image" caption="" width={40} allowSorting={false} cellRender={ImageCell} />
-                <Column dataField="name" width={100} />
-                <Column dataField="current_price" caption="Price" format="#0.####" dataType="number" />
+                <Column dataField="id" dataType="number" width={0} />
+                <Column dataField="allowed" dataType="boolean" width={0} />
+                <Column dataField="myCrypto" dataType="boolean" width={0} />
+                <Column dataField="image" dataType="string" caption="" width={40} allowSorting={false} cellRender={ImageCell} />
+                <Column dataField="name" dataType="string" width={100} />
+                <Column dataField="current_price" dataType="number" caption="Price" format="#0.####"/>
                 {/* <Column dataField="quote.USD.price" caption="µChange" dataType="number" width={140} format="#0.####" cellRender={ChangeCell} /> */}
                 <Column dataField="high_24h" caption="High 24h" dataType="number" cellRender={ColorCell} />
                 <Column dataField="low_24h" caption="Low 24h" dataType="number" cellRender={ColorCell} />

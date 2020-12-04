@@ -17,10 +17,12 @@ const Cryptocurrency = () => {
     const [crypto, setCrypto] = useState("");
 
     useEffect(() => {
-        //With MSWJS actived
-        axios.get('/crypto/bitcoin')     //{cryptoId}')
+        axios.get('/cryptos/'+cryptoId)
         .then(response => {
             setCrypto(response.data);
+        })
+        .catch(error => {
+            console.log(error);
         })
     }, []);
 
