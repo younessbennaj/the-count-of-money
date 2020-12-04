@@ -1,6 +1,11 @@
+import CryptosAutoComplete from "../components/CryotosAutoComplete";
+
 const Settings = () => {
     return (
-        <h2>Settings Page</h2>
+        <div>
+            <h2>Settings Page</h2>
+            <CryptosAutoComplete />
+        </div>
     );
 }
 
