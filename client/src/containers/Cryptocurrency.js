@@ -12,7 +12,6 @@ import "../index.css";
 const Cryptocurrency = () => {
     let location = useLocation();
     let cryptoId = location.state.cryptoId;
-    console.log(cryptoId);
 
     const [crypto, setCrypto] = useState("");
 
@@ -24,7 +23,7 @@ const Cryptocurrency = () => {
         .catch(error => {
             console.log(error);
         })
-    }, []);
+    }, [cryptoId]);
 
     if (crypto !== "") {
         return (
@@ -38,6 +37,7 @@ const Cryptocurrency = () => {
                             <div className="mb-4 text-grey-darker text-sm flex-1">
                                 <div dangerouslySetInnerHTML={{ __html: crypto.description.en }} />
                             </div>
+                            <hr style={{color: "grey", backgroundColor: "grey", height: 2}}/>
                             <a href={crypto.links.homepage[0]} className="border-t border-grey-light pt-2 text-xs text-blue hover:text-red uppercase no-underline tracking-wide">Official website</a>
                             <p className="text-xs">{crypto.symbol}</p>
                         </div>

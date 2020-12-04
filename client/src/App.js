@@ -59,9 +59,9 @@ function App() {
             </Route>
 
             {/* Article Route */}
-            <Route path="/cryptocurrency" exact>
+            <PrivateRoute path="/cryptocurrency" exact>
               <CryptocurrencyWithLayout title="Cryptocurrency" backTo="/" />
-            </Route>
+            </PrivateRoute>
 
             {/* Authentication Route */}
             {/* Nested routes => no "exact" */}
