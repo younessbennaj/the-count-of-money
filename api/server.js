@@ -165,6 +165,7 @@ app.post('/users/logout', (req, res) => {
     jwt.verify(req.headers.jwt, 'RANDOM_TOKEN_SECRET', function (err, decoded) {
       if (err) {
         res.status(400).end(JSON.stringify({ message: "Token expired" }));
+        return;
       }
       if (decoded.userId.length === 24) {
         _id = decoded.userId.length
@@ -196,6 +197,7 @@ app.put('/users/profile', (req, res) => {
     jwt.verify(req.headers.jwt, 'RANDOM_TOKEN_SECRET', function (err, decoded) {
       if (err) {
         res.status(400).end(JSON.stringify({ message: "Token expired" }));
+        return;
       }
       let password = req.body.password;
       bcrypt.hash(password, 10, function (err, hash) {
@@ -225,6 +227,7 @@ app.get('/users/profile', (req, res) => {
     jwt.verify(req.headers.jwt, 'RANDOM_TOKEN_SECRET', function (err, decoded) {
       if (err) {
         res.status(400).end(JSON.stringify({ message: "Token expired" }));
+        return;
       }
       if (decoded.userId.length === 24) {
         db.get().collection("users").find({ "_id": new ObjectId(decoded.userId) }).toArray(function (error, result) {
@@ -250,6 +253,7 @@ app.post('/users/delete', (req, res) => {
     jwt.verify(req.headers.jwt, 'RANDOM_TOKEN_SECRET', function (err, decoded) {
       if (err) {
         res.status(400).end(JSON.stringify({ message: "Token expired" }));
+        return;
       }
       if (decoded.userId.length === 24) {
         db.get().collection("users").find({ "_id": new ObjectId(decoded.userId) }).toArray(function (error, result) {
@@ -288,6 +292,7 @@ app.get('/cryptos', (req, res) => {
     jwt.verify(req.headers.jwt, 'RANDOM_TOKEN_SECRET', function (err, decoded) {
       if (err) {
         res.status(400).end(JSON.stringify({ message: "Token expired" }));
+        return;
       }
       if (decoded.userId.length === 24) {
         db.get().collection("users").find({ "_id": new ObjectId(decoded.userId) }).toArray(async function (error, result) {
@@ -297,8 +302,9 @@ app.get('/cryptos', (req, res) => {
             let data = await CoinGeckoClient.coins.markets({ "vs_currency": result[0].currencies });
             let allowedCryptos = result1.map(({ id }) => (id));
             const userCryptos = result[0].listCrypto;
-            let resulJson = data.data.map(({ id, name, current_price, high_24h, low_24h, image }) => ({
+            let resulJson = data.data.map(({ id, symbol, name, current_price, high_24h, low_24h, image }) => ({
               id,
+              symbol,
               name,
               current_price,
               high_24h,
@@ -324,10 +330,11 @@ app.get('/cryptos', (req, res) => {
     db.get().collection("adminCryptos").find().toArray(async function (error1, result1) {
       let data = await CoinGeckoClient.coins.markets({ "vs_currency": "eur" });
       let allowedCryptos = result1.map(({ id }) => (id));
-      let resulJson = data.data.map(({ id, name, current_price, high_24h, low_24h, image }) => ({
-        id, name, current_price, high_24h, low_24h, image, allowed: allowedCryptos.includes(id), myCrypto: false
+      let resulJson = data.data.map(({ id, symbol, name, current_price, high_24h, low_24h, image }) => ({
+        id, symbol, name, current_price, high_24h, low_24h, image, allowed: allowedCryptos.includes(id), myCrypto: false
       }))
-      res.status(200).send(resulJson);
+      const userData = resulJson.filter((el) => el.allowed === true)
+      res.status(200).send(userData);
     });
   }
 });
@@ -338,6 +345,7 @@ app.post('/cryptos', (req, res) => {
     jwt.verify(req.headers.jwt, 'RANDOM_TOKEN_SECRET', function (err, decoded) {
       if (err) {
         res.status(400).end(JSON.stringify({ message: "Token expired" }));
+        return;
       }
       if (decoded.userId.length === 24) {
         db.get().collection("users").find({ "_id": new ObjectId(decoded.userId) }).toArray(function (error, result) {
@@ -371,6 +379,7 @@ app.delete('/cryptos/:cmid', (req, res) => {
     jwt.verify(req.headers.jwt, 'RANDOM_TOKEN_SECRET', function (err, decoded) {
       if (err) {
         res.status(400).end(JSON.stringify({ message: "Token expired" }));
+        return;
       }
       if (decoded.userId.length === 24) {
         db.get().collection("users").find({ "_id": new ObjectId(decoded.userId) }).toArray(function (error, result) {
@@ -396,6 +405,7 @@ app.get('/cryptos/:cmid/history/:period', async (req, res) => {
     jwt.verify(req.headers.jwt, 'RANDOM_TOKEN_SECRET', async function (err, decoded) {
       if (err) {
         res.status(400).end(JSON.stringify({ message: "Token expired" }));
+        return;
       }
       db.get().collection("users").find({ "_id": new ObjectId(decoded.userId) }).toArray(async function (err2, result) {
         if (err2) throw err
@@ -444,6 +454,7 @@ app.get('/cryptos/:cmid', (req, res) => {
     jwt.verify(req.headers.jwt, 'RANDOM_TOKEN_SECRET', function (err, decoded) {
       if (err) {
         res.status(400).end(JSON.stringify({ message: "Token expired" }));
+        return;
       }
       if (decoded.userId.length === 24) {
         db.get().collection("users").find({ "_id": new ObjectId(decoded.userId) }).toArray(async function (error, result) {
