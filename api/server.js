@@ -18,7 +18,8 @@ const RSSFeed = require("./rssFlux/rss.js");
 
 const GOOGLE_CLIENT_ID = '10402001941-iplgmi34fo8q4eg3elq114cfklp41u65.apps.googleusercontent.com';
 const GOOGLE_CLIENT_SECRET = 'R7ZqmUbsOmdKIl0VmqWqZigG';
-const cryptocompare = require('cryptocompare')
+const cryptocompare = require('cryptocompare');
+// const { use } = require("passport");
 var userProfile;
 global.fetch = require('node-fetch');
 
@@ -97,18 +98,28 @@ db.connect(() => {
 
 
 /// attention db RIP
-// setInterval(async () => {
-//   console.log(RSSFeed);
-//   const feed = new RSSFeed();
-//   await feed.init('https://cointelegraph.com/feed', ['bitcoin', 'litecoin', 'ethereum']);
-
-//   db.get()
-//     .collection('articles')
-//     .insertMany(feed.data.items, async function (err, res) {
-//       if (err) throw err;
-//       console.log('inserted');
-//     });
-// }, 5000);
+setInterval(() => {
+  const feed = new RSSFeed();
+  db.get().collection("adminCryptos").find().toArray(async function (error, result) {
+    await feed.init('https://cointelegraph.com/feed', result.map(({ id }) => (id)));
+    db.get().collection("articles").find().toArray(async function (errorArticles, resultArticles) {
+      console.log(resultArticles.length);
+      articlesDb = resultArticles.map(({ isoDate }) => (new Date(isoDate)));
+      var maxDate = new Date(Math.max(...articlesDb));
+      let userData = feed.data.items.filter((el) => (new Date(el.isoDate)) > maxDate)
+      if (userData.length == 0) {
+        return;
+      }
+      db.get().collection("articles").deleteMany();
+      userData = [...resultArticles, ...userData].slice(0, 99);
+      db.get().collection('articles').insertMany(userData, function (err, res) {
+        if (err) throw err;
+        console.log('inserted');
+      });
+    });
+  });
+  // }, 43200000);
+}, 100000);
 
 /*                                            Connexion                                         */
 // Connexion a l'user
@@ -546,6 +557,54 @@ app.get("/users/auth/:provider/callback", ownMiddleware, (req, res, next) => {
       } else {
         res.status(400).end(JSON.stringify({ message: "Email already used on the site please connect without google" }));
       }
+    }
+  });
+});
+
+app.get('/articles', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  db.get().collection("articles").find().toArray(async function (errorArticles, resultArticles) {
+    if (errorArticles) throw errorArticles;
+    let resulJson = await resultArticles.map(({ _id, title, enclosure, link, categories }) => ({
+      _id,
+      title,
+      enclosure,
+      link,
+      categories,
+    }));
+    if (req.headers.hasOwnProperty('jwt')) {
+      jwt.verify(req.headers.jwt, 'RANDOM_TOKEN_SECRET', function (err, decoded) {
+        if (err) {
+          res.status(400).end(JSON.stringify({ message: "Token expired" }));
+          return;
+        }
+        if (decoded.userId.length === 24) {
+          db.get().collection("users").find({ "_id": new ObjectId(decoded.userId) }).toArray(async function (error, result) {
+            if (result[0].listWeb.length == 0) {
+              res.status(200).send(resulJson);
+              return;
+            }
+            let userData = resulJson.filter((el) => (result[0].listWeb.some(ai => el.categories.includes(ai))));
+            res.status(200).send(userData);
+            return;
+          });
+        } else {
+          res.status(400).end(JSON.stringify({ message: "Argument passed in must be a single String of 24 characters" }));
+        }
+      });
+    }
+    res.status(200).send(resulJson);
+  });
+});
+
+app.get('/articles/:id', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  db.get().collection("articles").find({ "_id": new ObjectId(req.params.id) }).toArray(async function (errorArticles, resultArticles) {
+    if (errorArticles) {
+      res.status(400).end(JSON.stringify({ message: "Article no exist" }));
+      return;
+    } else {
+      res.status(200).send(resultArticles[0]);
     }
   });
 });
