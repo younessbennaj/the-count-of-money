@@ -14,10 +14,12 @@ const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const strategy = require("passport-facebook");
 const FacebookStrategy = strategy.Strategy;
 
+const RSSFeed = require("./rssFlux/rss.js");
 
 const GOOGLE_CLIENT_ID = '10402001941-iplgmi34fo8q4eg3elq114cfklp41u65.apps.googleusercontent.com';
 const GOOGLE_CLIENT_SECRET = 'R7ZqmUbsOmdKIl0VmqWqZigG';
-const cryptocompare = require('cryptocompare')
+const cryptocompare = require('cryptocompare');
+// const { use } = require("passport");
 var userProfile;
 global.fetch = require('node-fetch');
 
@@ -94,6 +96,31 @@ db.connect(() => {
   });
 });
 
+
+/// attention db RIP
+setInterval(() => {
+  const feed = new RSSFeed();
+  db.get().collection("adminCryptos").find().toArray(async function (error, result) {
+    await feed.init('https://cointelegraph.com/feed', result.map(({ id }) => (id)));
+    db.get().collection("articles").find().toArray(async function (errorArticles, resultArticles) {
+      console.log(resultArticles.length);
+      articlesDb = resultArticles.map(({ isoDate }) => (new Date(isoDate)));
+      var maxDate = new Date(Math.max(...articlesDb));
+      let userData = feed.data.items.filter((el) => (new Date(el.isoDate)) > maxDate)
+      if (userData.length == 0) {
+        return;
+      }
+      db.get().collection("articles").deleteMany();
+      userData = [...resultArticles, ...userData].slice(0, 99);
+      db.get().collection('articles').insertMany(userData, function (err, res) {
+        if (err) throw err;
+        console.log('inserted');
+      });
+    });
+  });
+  // }, 43200000);
+}, 100000);
+
 /*                                            Connexion                                         */
 // Connexion a l'user
 app.post('/users/login', (req, res) => {
@@ -165,6 +192,7 @@ app.post('/users/logout', (req, res) => {
     jwt.verify(req.headers.jwt, 'RANDOM_TOKEN_SECRET', function (err, decoded) {
       if (err) {
         res.status(400).end(JSON.stringify({ message: "Token expired" }));
+        return;
       }
       if (decoded.userId.length === 24) {
         _id = decoded.userId.length
@@ -193,25 +221,27 @@ app.post('/users/logout', (req, res) => {
 app.put('/users/profile', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   if (req.headers.hasOwnProperty('jwt')) {
-    jwt.verify(req.headers.jwt, 'RANDOM_TOKEN_SECRET', function (err, decoded) {
+    jwt.verify(req.headers.jwt, 'RANDOM_TOKEN_SECRET', async function (err, decoded) {
       if (err) {
         res.status(400).end(JSON.stringify({ message: "Token expired" }));
+        return;
       }
-      let password = req.body.password;
-      bcrypt.hash(password, 10, function (err, hash) {
-        req.body.password = hash;
-        let data = req.body;
-        // password = hash;
-        //   const {nickname, mail, password, currencies, listCrypto, listWeb} = req.body
-        if (decoded.userId.length === 24) {
-          db.get().collection("users").updateOne({ "_id": new ObjectId(decoded.userId) }, { $set: data }, function (error, result) {
-            if (error) throw error;
-            res.status(200).end(JSON.stringify({ message: "Profile Updated" }));
+      if (req.body.hasOwnProperty('password')) {
+        await (async function () {
+          req.body.password = await new Promise(resolve => {
+            bcrypt.hash(req.body.password, 10, (err, hash) => resolve(hash));
           });
-        } else {
-          res.status(400).end(JSON.stringify({ message: "Wrong JWT" }));
-        }
-      });
+        })();
+      }
+      let data = req.body;
+      if (decoded.userId.length === 24) {
+        db.get().collection("users").updateOne({ "_id": new ObjectId(decoded.userId) }, { $set: data }, function (error, result) {
+          if (error) throw error;
+          res.status(200).end(JSON.stringify({ message: "Profile Updated" }));
+        });
+      } else {
+        res.status(400).end(JSON.stringify({ message: "Wrong JWT" }));
+      }
     });
   } else {
     res.status(400).end(JSON.stringify({ message: "Invalid request" }));
@@ -225,6 +255,7 @@ app.get('/users/profile', (req, res) => {
     jwt.verify(req.headers.jwt, 'RANDOM_TOKEN_SECRET', function (err, decoded) {
       if (err) {
         res.status(400).end(JSON.stringify({ message: "Token expired" }));
+        return;
       }
       if (decoded.userId.length === 24) {
         db.get().collection("users").find({ "_id": new ObjectId(decoded.userId) }).toArray(function (error, result) {
@@ -250,6 +281,7 @@ app.post('/users/delete', (req, res) => {
     jwt.verify(req.headers.jwt, 'RANDOM_TOKEN_SECRET', function (err, decoded) {
       if (err) {
         res.status(400).end(JSON.stringify({ message: "Token expired" }));
+        return;
       }
       if (decoded.userId.length === 24) {
         db.get().collection("users").find({ "_id": new ObjectId(decoded.userId) }).toArray(function (error, result) {
@@ -288,6 +320,7 @@ app.get('/cryptos', (req, res) => {
     jwt.verify(req.headers.jwt, 'RANDOM_TOKEN_SECRET', function (err, decoded) {
       if (err) {
         res.status(400).end(JSON.stringify({ message: "Token expired" }));
+        return;
       }
       if (decoded.userId.length === 24) {
         db.get().collection("users").find({ "_id": new ObjectId(decoded.userId) }).toArray(async function (error, result) {
@@ -297,8 +330,9 @@ app.get('/cryptos', (req, res) => {
             let data = await CoinGeckoClient.coins.markets({ "vs_currency": result[0].currencies });
             let allowedCryptos = result1.map(({ id }) => (id));
             const userCryptos = result[0].listCrypto;
-            let resulJson = data.data.map(({ id, name, current_price, high_24h, low_24h, image }) => ({
+            let resulJson = data.data.map(({ id, symbol, name, current_price, high_24h, low_24h, image }) => ({
               id,
+              symbol,
               name,
               current_price,
               high_24h,
@@ -324,10 +358,11 @@ app.get('/cryptos', (req, res) => {
     db.get().collection("adminCryptos").find().toArray(async function (error1, result1) {
       let data = await CoinGeckoClient.coins.markets({ "vs_currency": "eur" });
       let allowedCryptos = result1.map(({ id }) => (id));
-      let resulJson = data.data.map(({ id, name, current_price, high_24h, low_24h, image }) => ({
-        id, name, current_price, high_24h, low_24h, image, allowed: allowedCryptos.includes(id), myCrypto: false
+      let resulJson = data.data.map(({ id, symbol, name, current_price, high_24h, low_24h, image }) => ({
+        id, symbol, name, current_price, high_24h, low_24h, image, allowed: allowedCryptos.includes(id), myCrypto: false
       }))
-      res.status(200).send(resulJson);
+      const userData = resulJson.filter((el) => el.allowed === true)
+      res.status(200).send(userData);
     });
   }
 });
@@ -338,6 +373,7 @@ app.post('/cryptos', (req, res) => {
     jwt.verify(req.headers.jwt, 'RANDOM_TOKEN_SECRET', function (err, decoded) {
       if (err) {
         res.status(400).end(JSON.stringify({ message: "Token expired" }));
+        return;
       }
       if (decoded.userId.length === 24) {
         db.get().collection("users").find({ "_id": new ObjectId(decoded.userId) }).toArray(function (error, result) {
@@ -371,6 +407,7 @@ app.delete('/cryptos/:cmid', (req, res) => {
     jwt.verify(req.headers.jwt, 'RANDOM_TOKEN_SECRET', function (err, decoded) {
       if (err) {
         res.status(400).end(JSON.stringify({ message: "Token expired" }));
+        return;
       }
       if (decoded.userId.length === 24) {
         db.get().collection("users").find({ "_id": new ObjectId(decoded.userId) }).toArray(function (error, result) {
@@ -396,6 +433,7 @@ app.get('/cryptos/:cmid/history/:period', async (req, res) => {
     jwt.verify(req.headers.jwt, 'RANDOM_TOKEN_SECRET', async function (err, decoded) {
       if (err) {
         res.status(400).end(JSON.stringify({ message: "Token expired" }));
+        return;
       }
       db.get().collection("users").find({ "_id": new ObjectId(decoded.userId) }).toArray(async function (err2, result) {
         if (err2) throw err
@@ -444,6 +482,7 @@ app.get('/cryptos/:cmid', (req, res) => {
     jwt.verify(req.headers.jwt, 'RANDOM_TOKEN_SECRET', function (err, decoded) {
       if (err) {
         res.status(400).end(JSON.stringify({ message: "Token expired" }));
+        return;
       }
       if (decoded.userId.length === 24) {
         db.get().collection("users").find({ "_id": new ObjectId(decoded.userId) }).toArray(async function (error, result) {
@@ -518,6 +557,54 @@ app.get("/users/auth/:provider/callback", ownMiddleware, (req, res, next) => {
       } else {
         res.status(400).end(JSON.stringify({ message: "Email already used on the site please connect without google" }));
       }
+    }
+  });
+});
+
+app.get('/articles', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  db.get().collection("articles").find().toArray(async function (errorArticles, resultArticles) {
+    if (errorArticles) throw errorArticles;
+    let resulJson = await resultArticles.map(({ _id, title, enclosure, link, categories }) => ({
+      _id,
+      title,
+      enclosure,
+      link,
+      categories,
+    }));
+    if (req.headers.hasOwnProperty('jwt')) {
+      jwt.verify(req.headers.jwt, 'RANDOM_TOKEN_SECRET', function (err, decoded) {
+        if (err) {
+          res.status(400).end(JSON.stringify({ message: "Token expired" }));
+          return;
+        }
+        if (decoded.userId.length === 24) {
+          db.get().collection("users").find({ "_id": new ObjectId(decoded.userId) }).toArray(async function (error, result) {
+            if (result[0].listWeb.length == 0) {
+              res.status(200).send(resulJson);
+              return;
+            }
+            let userData = resulJson.filter((el) => (result[0].listWeb.some(ai => el.categories.includes(ai))));
+            res.status(200).send(userData);
+            return;
+          });
+        } else {
+          res.status(400).end(JSON.stringify({ message: "Argument passed in must be a single String of 24 characters" }));
+        }
+      });
+    }
+    res.status(200).send(resulJson);
+  });
+});
+
+app.get('/articles/:id', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  db.get().collection("articles").find({ "_id": new ObjectId(req.params.id) }).toArray(async function (errorArticles, resultArticles) {
+    if (errorArticles) {
+      res.status(400).end(JSON.stringify({ message: "Article no exist" }));
+      return;
+    } else {
+      res.status(200).send(resultArticles[0]);
     }
   });
 });

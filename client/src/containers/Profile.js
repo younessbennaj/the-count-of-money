@@ -5,6 +5,9 @@ import axios from "axios";
 import ProfileCard from '../components/ProfileCard';
 import ProfileForm from '../components/ProfileForm';
 
+//Auth 
+import { useAuthContext } from "../hooks/use-auth";
+
 function reducer(state, action) {
     let { cryptocurrencies, tags, username, currency, value } = action.payload;
     switch (action.type) {
@@ -35,6 +38,8 @@ function reducer(state, action) {
 }
 const Profile = () => {
 
+    const auth = useAuthContext();
+
     //boolean to know if we are in edit mode or not
     const [isEditMode, setIsEditMode] = useState(false);
 
@@ -42,23 +47,25 @@ const Profile = () => {
     const [state, dispatch] = useReducer(reducer, { cryptocurrencies: [], tags: [] });
 
     useEffect(() => {
-        axios.get("/users/profile")
-            .then(response => {
+        if (auth.user) {
+            axios.get("/users/profile")
+                .then(response => {
 
-                //Format the response data
-                const { nickname: username, listWeb: tags, listCrypto: cryptocurrencies, currencies: currency } = response.data;
+                    //Format the response data
+                    const { nickname: username, listWeb: tags, listCrypto: cryptocurrencies, currencies: currency } = response.data;
 
-                const payload = {
-                    username,
-                    tags,
-                    cryptocurrencies,
-                    currency
-                }
+                    const payload = {
+                        username,
+                        tags,
+                        cryptocurrencies,
+                        currency
+                    }
 
-                //Set user crendentials
-                dispatch({ type: 'INITIALIZE', payload });
-            })
-    }, []);
+                    //Set user crendentials
+                    dispatch({ type: 'INITIALIZE', payload });
+                })
+        }
+    }, [auth.user]);
 
     return (
         <div className="sm:w-full md:w-full lg:w-1/2 mx-auto sm:px-6 lg:px-8 pb-4">
