@@ -7,6 +7,9 @@ import {
 //Style
 import "../index.css";
 
+//Loading
+import Loading from "../components/Loading";
+
 //Chart
 import CryptoHistory from "../components/CryptoHistory";
 const Cryptocurrency = () => {
@@ -48,7 +51,9 @@ const Cryptocurrency = () => {
             </div>
         );
     } else {
-        return ("Loading...");
+        return (
+            <Loading/>
+        )
     }
 
     

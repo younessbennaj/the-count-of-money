@@ -8,7 +8,8 @@ import {
 //Style
 import "../index.css";
 
-//Components
+//Loading
+import Loading from "../components/Loading";
 
 const Article = () => {
     let location = useLocation();
@@ -56,10 +57,8 @@ const Article = () => {
         );
     } else {
         return (
-            <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
-                Loading
-            </svg>
-        );
+            <Loading/>
+        )
     }
 }
 
