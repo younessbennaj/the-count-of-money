@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import axios from "axios";
 
 //React Router 
 import {
@@ -13,9 +14,6 @@ import { withLayout } from "./hoc/Layout";
 //Protected Route HOC
 import { PrivateRoute } from "./hoc/PrivateRoute";
 
-//Auth Hook
-import { AuthContextProvider } from "./hooks/use-auth";
-
 //Import containers 
 import Dashboard from "./containers/Dashboard";
 import Cryptocurrency from "./containers/Cryptocurrency";
@@ -26,6 +24,9 @@ import Profile from "./containers/Profile";
 
 //Import components
 import Navbar from "./components/Navbar";
+
+//Auth Hook
+import { useAuthContext } from "./hooks/use-auth";
 
 function App() {
 
@@ -39,53 +40,55 @@ function App() {
 
   const ProfileWithLayout = withLayout(Profile);
 
+
+  const { getUser, isAuth } = useAuthContext();
+
+  //We get user credentials when we mount the page if the user is already logged
+  //e.g: When we refresh the page 
   useEffect(() => {
-    //with the real API
-    // axios.get('http://localhost:5000/api')
-    //   .then(response => {
-    //     console.log(response.data);
-    //     setMessage(response.data.message)
-    //   })
+    if (isAuth()) {
+      axios.defaults.headers.common['jwt'] = sessionStorage.getItem('jwt');
+      getUser();
+    }
   }, []);
+
   return (
     <Router>
-      <AuthContextProvider>
-        <div>
-          <Navbar />
-          <Switch>
-            {/* Dashboard Route */}
-            <Route path="/" exact>
-              <DashboardWithLayout title="Dashboard" />
-            </Route>
+      <div>
+        <Navbar />
+        <Switch>
+          {/* Dashboard Route */}
+          <Route path="/" exact>
+            <DashboardWithLayout title="Dashboard" />
+          </Route>
 
-            {/* Article Route */}
-            <PrivateRoute path="/cryptocurrency" exact>
-              <CryptocurrencyWithLayout title="Cryptocurrency" backTo="/" />
-            </PrivateRoute>
+          {/* Article Route */}
+          <PrivateRoute path="/cryptocurrency" exact>
+            <CryptocurrencyWithLayout title="Cryptocurrency" backTo="/" />
+          </PrivateRoute>
 
-            {/* Authentication Route */}
-            {/* Nested routes => no "exact" */}
-            <Route path="/authentication">
-              <AuthenticationWithLayout title="Authentication" />
-            </Route>
+          {/* Authentication Route */}
+          {/* Nested routes => no "exact" */}
+          <Route path="/authentication">
+            <AuthenticationWithLayout title="Authentication" />
+          </Route>
 
-            {/* Articles Route */}
-            <Route path="/articles" exact>
-              <NewsWithLayout title="News" />
-            </Route>
+          {/* Articles Route */}
+          <Route path="/articles" exact>
+            <NewsWithLayout title="News" />
+          </Route>
 
-            {/* Article Route */}
-            <Route path="/article" exact>
-              <ArticleWithLayout title="Article" backTo="/articles" />
-            </Route>
+          {/* Article Route */}
+          <Route path="/article" exact>
+            <ArticleWithLayout title="Article" backTo="/articles" />
+          </Route>
 
-            {/* Profile Route */}
-            <PrivateRoute path="/profile" exact>
-              <ProfileWithLayout title="Profile" />
-            </PrivateRoute>
-          </Switch>
-        </div>
-      </AuthContextProvider>
+          {/* Profile Route */}
+          <PrivateRoute path="/profile" exact>
+            <ProfileWithLayout title="Profile" />
+          </PrivateRoute>
+        </Switch>
+      </div>
     </Router>
   );
 }

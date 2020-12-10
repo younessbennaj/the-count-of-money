@@ -9,6 +9,9 @@ import './style.css';
 //Components
 import App from './App';
 
+//Auth Hook
+import { AuthContextProvider } from "./hooks/use-auth";
+
 
 //If you want to work with the Mock API
 if (process.env.REACT_APP_API_CONFIG === 'development') {
@@ -25,7 +28,9 @@ if (process.env.REACT_APP_API_CONFIG === 'development') {
 }
 
 ReactDOM.render(
-  <App />,
+  <AuthContextProvider>
+    <App />
+  </AuthContextProvider>,
   document.getElementById('root')
 );
 
