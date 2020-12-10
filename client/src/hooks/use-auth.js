@@ -36,13 +36,6 @@ function useProvideAuth() {
         });
     }
 
-    const getUser = () => {
-        getUserCredentials(credentials => {
-            // //we get the user credentials
-            setUser(credentials);
-        })
-    }
-
     const isAuth = () => {
         //return a boolean to check if the user is logged in
         return !!sessionStorage.getItem('jwt');

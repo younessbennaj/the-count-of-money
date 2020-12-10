@@ -84,14 +84,28 @@ const CryptosAutoComplete = ({ allowedCryptos, setAllowedCryptos }) => {
     }
 
     return (
-        <div>
+        <div >
             <h2>CryptosAutoComplete</h2>
-            <input value={query} onFocus={handleInputFocus} onBlur={handleInputBlur} onChange={handleInputChange} className="border border-gray-300 focus:outline-none focus:border-blue-400 rounded-md" type="text" />
-            <ul>
-                {selection.map(({ name, id }) => {
-                    return <li onMouseDown={() => handleAddCrypto(id)} key={id}>{name}</li>
-                })}
-            </ul>
+            <div className="relative flex flex-col bg-white">
+                <input
+                    placeholder="Search crypto-currencies"
+                    value={query}
+                    onFocus={handleInputFocus}
+                    onBlur={handleInputBlur}
+                    onChange={handleInputChange}
+                    className="border border-gray-300 focus:outline-none focus:border-blue-400 rounded-md py-2 px-3" type="text" />
+                <ul className="rounded-lg overflow-hidden absolute top-full left-0 right-0 bg-white divide-y divide-blue-50 shadow-xl">
+                    {selection.map(({ name, id }) => {
+                        return <li
+                            onMouseDown={() => handleAddCrypto(id)}
+                            key={id}
+                            className="py-2 px-4 hover:bg-blue-50 font-medium0"
+                        >{name}
+                        </li>
+                    })}
+                </ul>
+            </div>
+
         </div>
     );
 }

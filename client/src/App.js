@@ -89,6 +89,11 @@ function App() {
           <PrivateRoute path="/profile" exact>
             <ProfileWithLayout title="Profile" />
           </PrivateRoute>
+
+          {/* Profile Route */}
+          <AdminRoute path="/settings" exact>
+            <SettingsWithLayout title="Settings" />
+          </AdminRoute>
         </Switch>
       </div>
     </Router>
