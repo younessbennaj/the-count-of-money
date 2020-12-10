@@ -24,12 +24,11 @@ const News = () => {
         <div className="flex flex-wrap -m-3">
             {data.map((article, index) => (
                 <ArticleCard
+                    id={article._id}
                     title={article.title}
-                    content={article.description}
-                    author={article.author}
-                    source={article.source.name}
-                    url={article.url}
-                    image={article.urlToImage}
+                    url={article.link}
+                    categories={article.categories}
+                    image={article.enclosure.url}
                     key={index}
                 />
             ))}

@@ -48,10 +48,10 @@ const Dashboard = () => {
         }
     }
 
-    if (isAuth)
-        filters = [['allowed', '=', true], ['myCrypto', '=', false]];
-    else
-        filters = ['allowed', '=', true];
+    // if (isAuth)
+    //     filters = [['allowed', '=', true], ['myCrypto', '=', false]];
+    // else
+    //     filters = ['allowed', '=', true];
 
     return (
         <div>

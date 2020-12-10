@@ -50,6 +50,7 @@ function App() {
       axios.defaults.headers.common['jwt'] = sessionStorage.getItem('jwt');
       getUser();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
