@@ -32,7 +32,6 @@ const Dashboard = () => {
     useEffect(() => {
         axios.get('/cryptos')
             .then(response => {
-                console.log(response.data);
                 setData(response.data);
             })
             .catch(error => {

@@ -18,7 +18,6 @@ const Settings = () => {
     )
 
     function handleUpdateClick() {
-        console.log('update cryptos global config');
 
         const data = allowedCryptos.map(crypto => {
             return { id: crypto.id };
@@ -72,8 +71,11 @@ const Settings = () => {
     }, []);
 
     return (
-        <div>
-            <h2>Settings Page</h2>
+        <div className="border border-gray-500 rounded-lg p-7 box-border">
+            <div className="mt-3 mb-6">
+                <h2 className="text-2xl light text-center my-2">Crypto-currencies Settings</h2>
+                <p className="light text-sm text-gray-500 text-center my-1">Set crypto-currencies configuration</p>
+            </div>
             <CryptosAutoComplete
                 setAllowedCryptos={setAllowedCryptos}
                 allowedCryptos={allowedCryptos}
@@ -81,7 +83,7 @@ const Settings = () => {
                 setUnAllowedCrytos={setUnAllowedCrytos}
             />
             <div>
-                <h4>Allowed Cryptos</h4>
+                <span className="uppercase text-gray-400 text-xs ml-2 my-4 inline-block">Allowed cryptocurrencies</span>
                 <ul>
                     {allowedCryptos.map(crypto => {
                         return <li key={crypto.id} className="inline-block">
@@ -89,7 +91,7 @@ const Settings = () => {
                         </li>
                     })}
                 </ul>
-                <div>
+                <div className="pt-7">
                     <button className="py-2 px-4 rounded-md text-gray-50 text-lg bg-blue-500 border-blue-500 shadow-md mr-2" onClick={handleUpdateClick}>Update</button>
                     <button className="py-2 px-4 rounded-md text-gray-500 text-lg border-gray-500 border" onClick={handleResetClick}>Reset</button>
                 </div>

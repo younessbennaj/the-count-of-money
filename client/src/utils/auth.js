@@ -34,6 +34,7 @@ export const authenticateUser = ({ email: mail, password }, type, cb) => {
 
 export function logoutUser() {
     sessionStorage.removeItem('jwt');
+    sessionStorage.removeItem('is-admin');
     //We prevent an async op in the future
     return Promise.resolve();
 }
