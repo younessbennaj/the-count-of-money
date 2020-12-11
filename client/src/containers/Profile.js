@@ -51,6 +51,8 @@ const Profile = () => {
             axios.get("/users/profile")
                 .then(response => {
 
+                    console.log(response.data);
+
                     //Format the response data
                     const { nickname: username, listWeb: tags, listCrypto: cryptocurrencies, currencies: currency } = response.data;
 

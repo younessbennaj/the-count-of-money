@@ -1,4 +1,5 @@
 const UIChips = ({item, defaultChecked}) => {
+    console.log(defaultChecked);
     return (
         <label htmlFor={item} className="chips">
             <input 

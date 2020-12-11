@@ -35,25 +35,34 @@ const ProfileCard = ({ credentials, setIsEditMode }) => {
                     <div>
                         <span className="uppercase text-gray-400 text-xs my-4 inline-block">Your cryptocurrencies preferences</span>
                         <ul className="">
-                            {credentials.cryptocurrencies.map(crypto => {
-                                return (
-                                    <li key={crypto} className="inline-block">
-                                        <span className="bg-blue-200 rounded-lg px-3 py-2 inline-block m-1 text-blue-700">{crypto}</span>
-                                    </li>
-                                )
-                            })}
+                            {credentials.cryptocurrencies.length ?
+
+                                credentials.cryptocurrencies.map(crypto => {
+                                    return (
+                                        <li key={crypto} className="inline-block">
+                                            <span className="bg-blue-200 rounded-lg px-3 py-2 inline-block m-1 text-blue-700">{crypto}</span>
+                                        </li>
+                                    )
+                                })
+                                :
+                                <p>(No crypto-currencies preferences)</p>
+                            }
                         </ul>
                     </div>
                     <div>
                         <span className="uppercase text-gray-400 text-xs my-4 inline-block">Your news preferences</span>
                         <ul className="profile-card__chips-list">
-                            {credentials.tags.map(tag => {
-                                return (
-                                    <li key={tag} className="inline-block">
-                                        <span className="bg-blue-200 rounded-lg px-2 py-2 inline-block m-1 text-blue-700">#{tag}</span>
-                                    </li>
-                                )
-                            })}
+                            {credentials.tags.length ?
+                                credentials.tags.map(tag => {
+                                    return (
+                                        <li key={tag} className="inline-block">
+                                            <span className="bg-blue-200 rounded-lg px-2 py-2 inline-block m-1 text-blue-700">#{tag}</span>
+                                        </li>
+                                    )
+                                })
+                                :
+                                <p>(No news preferences)</p>
+                            }
                         </ul>
                     </div>
                 </div>

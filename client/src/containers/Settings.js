@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 
+//Utils
+import { getAllowedCryptos, getUnAllowedCryptos } from "../utils/cryptos";
+
 //Components
 import CryptosAutoComplete from "../components/CryotosAutoComplete";
 
@@ -10,12 +13,6 @@ const Settings = () => {
     let history = useHistory();
     const [allowedCryptos, setAllowedCryptos] = useState([]);
     const [unAllowedCrytos, setUnAllowedCrytos] = useState([])
-
-    const closeIcon = (
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-    )
 
     function handleUpdateClick() {
 
@@ -32,19 +29,15 @@ const Settings = () => {
     }
 
     function handleResetClick() {
-        axios.get('/cryptos')
-            .then(response => {
-                let allowed = response.data.filter(crypto => {
-                    return crypto.allowed;
-                })
 
-                let unAllowed = response.data.filter(crypto => {
-                    return !crypto.allowed;
-                })
+        getAllowedCryptos().then(allowed => {
+            setAllowedCryptos(allowed);
+        })
 
-                setUnAllowedCrytos(unAllowed);
-                setAllowedCryptos(allowed);
-            });
+        getUnAllowedCryptos().then(unAllowed => {
+            setUnAllowedCrytos(unAllowed);
+        })
+
     }
 
     function handleRemoveCrypto(id) {
@@ -56,18 +49,13 @@ const Settings = () => {
     }
 
     useEffect(() => {
-        axios.get('/cryptos')
-            .then(response => {
-                let allowed = response.data.filter(crypto => {
-                    return crypto.allowed;
-                })
+        getAllowedCryptos().then(allowed => {
+            setAllowedCryptos(allowed);
+        })
 
-                let unAllowed = response.data.filter(crypto => {
-                    return !crypto.allowed;
-                })
-                setUnAllowedCrytos(unAllowed);
-                setAllowedCryptos(allowed);
-            });
+        getUnAllowedCryptos().then(unAllowed => {
+            setUnAllowedCrytos(unAllowed);
+        })
     }, []);
 
     return (
