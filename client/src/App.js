@@ -5,7 +5,8 @@ import axios from "axios";
 import {
   BrowserRouter as Router,
   Switch,
-  Route
+  Route,
+  useHistory
 } from "react-router-dom";
 
 //Layout HOC
@@ -29,6 +30,8 @@ import Navbar from "./components/Navbar";
 //Auth Hook
 import { useAuthContext } from "./hooks/use-auth";
 
+// const auth = useAuthContext();
+
 function App() {
 
   //Return page component with identical layout wrapper
@@ -43,7 +46,7 @@ function App() {
 
   const SettingsWithLayout = withLayout(Settings);
 
-  const { getUser, isAuth } = useAuthContext();
+  const { getUser, isAuth, signout } = useAuthContext();
 
   //We get user credentials when we mount the page if the user is already logged
   //e.g: When we refresh the page 

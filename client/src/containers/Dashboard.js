@@ -32,6 +32,7 @@ const Dashboard = () => {
     useEffect(() => {
         axios.get('/cryptos')
             .then(response => {
+                console.log(response.data);
                 setData(response.data);
             })
             .catch(error => {
@@ -70,7 +71,7 @@ const Dashboard = () => {
                 <Column dataField="myCrypto" dataType="boolean" visible={false} />
                 <Column dataField="image" dataType="string" caption="" width={40} allowSorting={false} cellRender={ImageCell} />
                 <Column dataField="name" dataType="string" width={100} />
-                <Column dataField="current_price" dataType="number" caption="Price" format="#0.####"/>
+                <Column dataField="current_price" dataType="number" caption="Price" format="#0.####" />
                 {/* <Column dataField="quote.USD.price" caption="µChange" dataType="number" width={140} format="#0.####" cellRender={ChangeCell} /> */}
                 <Column dataField="low_24h" caption="Low 24h" dataType="number" cellRender={ColorCell} />
                 <Column dataField="high_24h" caption="High 24h" dataType="number" cellRender={ColorCell} />

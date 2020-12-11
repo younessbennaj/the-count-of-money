@@ -358,7 +358,12 @@ export const handlers = [
             ),
         )
     }),
-
+    rest.post('/cryptos', (req, res, ctx) => {
+        return res(
+            ctx.status(200),
+            ctx.json({ message: "Cryptos updated" })
+        )
+    }),
     rest.get('/articles', (req, res, ctx) => {
         return res(
             ctx.status(200),

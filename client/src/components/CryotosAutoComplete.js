@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import axios from "axios";
 
+//State de l'autocomplete
 function reducer(state, action) {
     switch (action.type) {
         case "INITIALIZE":
@@ -20,7 +21,7 @@ function reducer(state, action) {
     }
 }
 
-const CryptosAutoComplete = ({ allowedCryptos, setAllowedCryptos }) => {
+const CryptosAutoComplete = ({ allowedCryptos, setAllowedCryptos, unAllowedCrytos, setUnAllowedCrytos }) => {
     // //All the cryptos that the admin can add to the preferences
     // const [cryptos, setCryptos] = useState([]);
 
@@ -34,11 +35,8 @@ const CryptosAutoComplete = ({ allowedCryptos, setAllowedCryptos }) => {
     const [state, dispatch] = useReducer(reducer, { cryptos: [] });
 
     useEffect(() => {
-        axios.get('/cryptos')
-            .then(response => {
-                dispatch({ type: "INITIALIZE", payload: response.data });
-            });
-    }, []);
+        dispatch({ type: "INITIALIZE", payload: unAllowedCrytos });
+    }, [unAllowedCrytos]);
 
     useEffect(() => {
         getAutocomplete(query, state.cryptos);
@@ -66,12 +64,13 @@ const CryptosAutoComplete = ({ allowedCryptos, setAllowedCryptos }) => {
         getAutocomplete(query, state.cryptos);
     }
 
-    function handleAddCrypto(id) {
-        if (id) {
+    function handleAddCrypto(crypto) {
+        if (crypto) {
             //We add the selected crypto to the allowedCryptos array to send this information to the API
-            setAllowedCryptos([...allowedCryptos, id])
+            setAllowedCryptos([...allowedCryptos, crypto])
+            setUnAllowedCrytos(unAllowedCrytos.filter(c => c.id !== crypto.id));
             //Then we need to remove the crypto from the current crypto that the admin can allow to the settings
-            dispatch({ type: "REMOVE_CRYPTO", payload: { id } })
+            dispatch({ type: "REMOVE_CRYPTO", payload: { id: crypto.id } })
             //Clear the autcomplete pannel 
             setSelection([]);
             //Clear the input
@@ -95,12 +94,12 @@ const CryptosAutoComplete = ({ allowedCryptos, setAllowedCryptos }) => {
                     onChange={handleInputChange}
                     className="border border-gray-300 focus:outline-none focus:border-blue-400 rounded-md py-2 px-3" type="text" />
                 <ul className="rounded-lg overflow-hidden absolute top-full left-0 right-0 bg-white divide-y divide-blue-50 shadow-xl">
-                    {selection.map(({ name, id }) => {
+                    {selection.map((crypto) => {
                         return <li
-                            onMouseDown={() => handleAddCrypto(id)}
-                            key={id}
+                            onMouseDown={() => handleAddCrypto(crypto)}
+                            key={crypto.id}
                             className="py-2 px-4 hover:bg-blue-50 font-medium0"
-                        >{name}
+                        >{crypto.name}
                         </li>
                     })}
                 </ul>
