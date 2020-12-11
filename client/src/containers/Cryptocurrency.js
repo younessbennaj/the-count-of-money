@@ -7,8 +7,11 @@ import {
 //Style
 import "../index.css";
 
-//Chart
+//Loading
+import Loading from "../components/Loading";
 
+//Chart
+import CryptoHistory from "../components/CryptoHistory";
 const Cryptocurrency = () => {
     let location = useLocation();
     let cryptoId = location.state.cryptoId;
@@ -38,6 +41,8 @@ const Cryptocurrency = () => {
                                 <div dangerouslySetInnerHTML={{ __html: crypto.description.en }} />
                             </div>
                             <hr style={{color: "grey", backgroundColor: "grey", height: 2}}/>
+                            <CryptoHistory cryptoSymbol={crypto.symbol}/>
+                            <hr style={{color: "grey", backgroundColor: "grey", height: 2}}/>
                             <a href={crypto.links.homepage[0]} className="border-t border-grey-light pt-2 text-xs text-blue hover:text-red uppercase no-underline tracking-wide">Official website</a>
                             <p className="text-xs">{crypto.symbol}</p>
                         </div>
@@ -46,7 +51,9 @@ const Cryptocurrency = () => {
             </div>
         );
     } else {
-        return ("Loading...");
+        return (
+            <Loading/>
+        )
     }
 
     

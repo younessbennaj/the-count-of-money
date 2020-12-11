@@ -7,6 +7,9 @@ import "../index.css";
 //Components
 import ArticleCard from "../components/ArticleCard";
 
+//Loading
+import Loading from "../components/Loading";
+
 const News = () => {
 
     const [data, setData] = useState([]);
@@ -15,26 +18,31 @@ const News = () => {
 
         //With MSWJS actived
         axios.get('/articles')
-            .then(response => {
-                setData(response.data);
-            })
+        .then(response => {
+            setData(response.data);
+        })
     }, []);
 
-    return (
-        <div className="flex flex-wrap -m-3">
-            {data.map((article, index) => (
-                <ArticleCard
-                    title={article.title}
-                    content={article.description}
-                    author={article.author}
-                    source={article.source.name}
-                    url={article.url}
-                    image={article.urlToImage}
-                    key={index}
-                />
-            ))}
-        </div>
-    );
+    if(data.length > 0) {
+        return (
+            <div className="flex flex-wrap">
+                {data.map((article, index) => (
+                    <ArticleCard
+                        id={article._id}
+                        title={article.title}
+                        url={article.link}
+                        categories={article.categories}
+                        image={article.enclosure.url}
+                        key={index}
+                    />
+                ))}
+            </div>
+        );
+    } else {
+        return (
+            <Loading/>
+        )
+    }
 }
 
 export default News;
