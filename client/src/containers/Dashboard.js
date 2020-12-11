@@ -41,7 +41,6 @@ const Dashboard = () => {
                 console.log(error);
             })
     }, [isAuth]); //If the user auth state change, then re fetch cryptos information
-
     function rowClick(e) {
         if (e.rowType === "data") {
             history.push({
@@ -75,29 +74,28 @@ const Dashboard = () => {
                     <Column dataField="myCrypto" dataType="boolean" visible={false} />
                     <Column dataField="image" dataType="string" caption="" width={40} allowSorting={false} cellRender={ImageCell} />
                     <Column dataField="name" dataType="string" width={100} />
-                    <Column dataField="current_price" dataType="number" caption="Price" format="#0.####"/>
+                    <Column dataField="current_price" dataType="number" caption="Price" format="#0.####" />
                     {/* <Column dataField="quote.USD.price" caption="µChange" dataType="number" width={140} format="#0.####" cellRender={ChangeCell} /> */}
                     <Column dataField="low_24h" caption="Low 24h" dataType="number" cellRender={ColorCell} />
                     <Column dataField="high_24h" caption="High 24h" dataType="number" cellRender={ColorCell} />
                     <Summary>
                         <TotalItem
-                        displayFormat="Total : {0}"
-                        showInColumn="name" />
+                            displayFormat="Total : {0}"
+                            showInColumn="name" />
                     </Summary>
                     <Paging defaultPageSize={8} />
                     <Pager
-                    showPageSizeSelector={true}
-                    allowedPageSizes={[8, 16, 32]}
-                    showInfo={true} />
+                        showPageSizeSelector={true}
+                        allowedPageSizes={[8, 16, 32]}
+                        showInfo={true} />
                 </DataGrid>
             </div>
         );
     } else {
         return (
-            <Loading/>
+            <Loading />
         )
     }
-    
 }
 
 export default Dashboard;

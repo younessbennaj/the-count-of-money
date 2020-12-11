@@ -29,3 +29,22 @@ export function PrivateRoute({ children, path }) {
     )
 }
 
+export function AdminRoute({ children, path }) {
+
+    //Boolean that tell us if the user is authenticated
+    const { isAuth, isAdmin } = useAuthContext();
+
+    return (
+        <Route path={path}>
+            {isAuth() && isAdmin() ?
+                children :
+                <Redirect
+                    to={{
+                        pathname: "/"
+                    }}
+                />}
+        </Route>
+    )
+}
+
+
