@@ -44,7 +44,6 @@ const CryptoHistory = (cryptoSymbol) => {
       }
 
     const createGraph = (datas) => {
-        console.log(datas);
         const labels = datas.map(data => {
             let a = new Date(data.time * 1000);
             var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];

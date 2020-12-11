@@ -8,7 +8,7 @@ import { useAuthContext } from "../hooks/use-auth"
 //Devextreme table
 import 'devextreme/dist/css/dx.common.css';
 import 'devextreme/dist/css/dx.light.css';
-import DataGrid, { Column } from 'devextreme-react/data-grid';
+import DataGrid, { Column, Summary, TotalItem, Paging, Pager } from 'devextreme-react/data-grid';
 import ColorCell from '../components/devextreme/ColorCell';
 import ImageCell from '../components/devextreme/ImageCell';
 
@@ -79,6 +79,16 @@ const Dashboard = () => {
                     {/* <Column dataField="quote.USD.price" caption="µChange" dataType="number" width={140} format="#0.####" cellRender={ChangeCell} /> */}
                     <Column dataField="low_24h" caption="Low 24h" dataType="number" cellRender={ColorCell} />
                     <Column dataField="high_24h" caption="High 24h" dataType="number" cellRender={ColorCell} />
+                    <Summary>
+                        <TotalItem
+                        displayFormat="Total : {0}"
+                        showInColumn="name" />
+                    </Summary>
+                    <Paging defaultPageSize={8} />
+                    <Pager
+                    showPageSizeSelector={true}
+                    allowedPageSizes={[8, 16, 32]}
+                    showInfo={true} />
                 </DataGrid>
             </div>
         );

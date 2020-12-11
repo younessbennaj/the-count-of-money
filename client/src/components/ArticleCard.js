@@ -15,6 +15,11 @@ const ArticleCard = ({ id, title, url, categories, image }) => {
                 <img className="bg-cover h-48" src={image} alt=""></img>
                 <div className="p-4 flex-1 flex flex-col">
                     <h3 className="mb-4 text-xl">{title}</h3>
+                    <div className="flex">
+                    {categories.map((cat, index) => (
+                        <h5 className="flex mb-4 text-base" key={index}>#{cat}</h5>
+                    ))}
+                    </div>
                     <a href={url} className="underline">See the original</a>
                 </div>
             </div>

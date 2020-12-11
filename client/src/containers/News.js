@@ -18,14 +18,14 @@ const News = () => {
 
         //With MSWJS actived
         axios.get('/articles')
-            .then(response => {
-                setData(response.data);
-            })
+        .then(response => {
+            setData(response.data);
+        })
     }, []);
 
     if(data.length > 0) {
         return (
-            <div className="flex flex-wrap -m-3">
+            <div className="flex flex-wrap">
                 {data.map((article, index) => (
                     <ArticleCard
                         id={article._id}
