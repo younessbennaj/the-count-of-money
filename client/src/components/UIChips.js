@@ -1,11 +1,11 @@
-const UIChips = ({item, defaultChecked}) => {
+const UIChips = ({item, value, defaultChecked}) => {
     return (
         <label htmlFor={item} className="chips">
             <input 
                 type="checkbox"
                 id={item}
                 name={item}
-                value={item}
+                value={value}
                 defaultChecked={defaultChecked}
                 className="hidden"
             />

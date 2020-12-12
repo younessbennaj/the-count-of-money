@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import UIChips from "./UIChips";
 import axios from 'axios';
+
+//Utils
+import { getAllowedCryptos, getUnAllowedCryptos } from "../utils/cryptos";
 
 
 const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
@@ -50,10 +53,18 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
     // *** LOCAL STATE ***
 
     //Options of crytos that the user can add to his preferences 
-    const [cryptosOptions] = useState(cryptosMock);
+    const [cryptosOptions, setCryptosOptions] = useState([]);
 
     //Options of news tags that the user can add to his preferences 
     const [tagsOptions] = useState(tagsMock);
+
+    // SIDE EFFECT CODE HERE
+    useEffect(() => {
+        getAllowedCryptos().then(allowed => {
+            console.log(allowed);
+            setCryptosOptions(allowed);
+        })
+    }, []);
 
     // *** Event handlers *** 
 
@@ -105,9 +116,11 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
             listWeb: credentials.tags
         }
 
-        var data = JSON.stringify(userCredentials);
+        console.log(userCredentials);
 
-        axios.put('/users/profile', data) 
+        // var data = JSON.stringify(userCredentials);
+
+        axios.put('/users/profile', userCredentials) 
             .then(response => {
                 //Leave the edit mode and return to the profile card
                 setIsEditMode(false)
@@ -116,9 +129,9 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
 
     //utils
     function isUserPreferences(value, preferences) {
+    
         //Check if the value is in the user preferences
-        return !!preferences.find(preference => preference === value);
-        // return true;
+        return !!preferences.find(preference => preference === value.id);
     }
 
     return (
@@ -173,8 +186,9 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
                         {cryptosOptions.map(crypto => {
                             return (
                                 <UIChips 
-                                    key={crypto} 
-                                    item={crypto}  
+                                    key={crypto.id} 
+                                    item={crypto.name}  
+                                    value={crypto.id}
                                     //True, if the crypto value from the admin selection is in the user preferences
                                     defaultChecked={isUserPreferences(crypto, credentials.cryptocurrencies)}
                                 />
@@ -182,7 +196,7 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
                         })}
 
                     </fieldset>
-                    <fieldset onChange={e => handleTagChange(e)} className="my-4">
+                    {/* <fieldset onChange={e => handleTagChange(e)} className="my-4">
                         <legend className="block text-sm font-medium text-gray-700 pl-1 pb-1">Select a tag</legend>
                         {tagsOptions.map(tag => {
                             return (
@@ -194,7 +208,7 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
                                 />
                             )
                         })}
-                    </fieldset>
+                    </fieldset> */}
                     <input 
                         className="mt-6 py-2 px-4 bg-blue-500 rounded-md text-gray-50 text-lg hover:bg-blue-600"
                         type="submit" 

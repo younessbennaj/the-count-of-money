@@ -51,7 +51,7 @@ const Dashboard = () => {
     }
 
     if (isAuth)
-        filters = [['allowed', '=', true], ['myCrypto', '=', false]];
+        filters = [['allowed', '=', true], ['myCrypto', '=', true]];
     else
         filters = ['allowed', '=', true];
 
