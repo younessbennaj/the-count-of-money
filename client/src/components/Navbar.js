@@ -15,10 +15,21 @@ const Navbar = () => {
 
     let history = useHistory();
 
+    //Create a ref to work with dom element
+    const mobileMenu = React.createRef(null);
+
     //Method to signout the user
     const { signout, isAuth, isAdmin } = useAuthContext();
 
-    console.log(isAdmin());
+    function handleToggleMenu() {
+
+        if (mobileMenu.current.className === `hidden`) {
+            mobileMenu.current.className = "h-auto absolute top-full right-0 left-0 bg-gray-800 z-10";
+        } else {
+            mobileMenu.current.className = `hidden`;
+        }
+
+    }
 
 
     function logout(e) {
@@ -29,7 +40,7 @@ const Navbar = () => {
     }
 
     return (
-        <nav className="bg-gray-800">
+        <nav className="bg-gray-800 relative">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     <div className="flex items-center">
@@ -89,7 +100,7 @@ const Navbar = () => {
                         </div>
                     </div>
                     <div className="-mr-2 flex md:hidden">
-                        <button className="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                        <button onClick={handleToggleMenu} className="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                             <span className="sr-only">Open main menu</span>
 
                             <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -141,6 +152,17 @@ const Navbar = () => {
                         <a href="/#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">Sign out</a>
                     </div>
                 </div>
+            </div>
+
+            {/* Mobile menu */}
+            <div className="hidden" ref={mobileMenu}>
+                <ul className="text-gray-50 text-xl py-5">
+                    <li onClick={handleToggleMenu}><Link to="/" className="pl-6 py-3 inline-block" >Dashboard</Link></li>
+                    <li onClick={handleToggleMenu}><Link to="/articles" className="pl-6 py-3 inline-block" >News</Link></li>
+                    {isAuth() && <li onClick={handleToggleMenu}><Link to="/profile" className="pl-6 py-3 inline-block" >Profile</Link></li>}
+                    {isAdmin() && <li onClick={handleToggleMenu}><Link to="/settings" className="pl-6 py-3 inline-block" >Settings</Link></li>}
+                    {!isAuth() && <li onClick={handleToggleMenu}><Link to="/authentication/login" className="pl-6 py-3 inline-block" >Login</Link></li>}
+                </ul>
             </div>
         </nav>
     );
