@@ -17,6 +17,7 @@ const Navbar = () => {
 
     //Create a ref to work with dom element
     const mobileMenu = React.createRef(null);
+    const pannel = React.createRef(null);
 
     //Method to signout the user
     const { signout, isAuth, isAdmin } = useAuthContext();
@@ -27,6 +28,15 @@ const Navbar = () => {
             mobileMenu.current.className = "h-auto absolute top-full right-0 left-0 bg-gray-800 z-10";
         } else {
             mobileMenu.current.className = `hidden`;
+        }
+
+    }
+
+    function handleTogglePannel() {
+        if (pannel.current.className === "hidden") {
+            pannel.current.className = "origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5"
+        } else {
+            pannel.current.className = "hidden";
         }
 
     }
@@ -78,14 +88,14 @@ const Navbar = () => {
                             {isAuth() && (
                                 <div className="ml-3 relative">
                                     <div>
-                                        <button className="max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white" id="user-menu" aria-haspopup="true">
+                                        <button onClick={handleTogglePannel} className="max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white" id="user-menu" aria-haspopup="true">
                                             <span className="sr-only">Open user menu</span>
                                             <img className="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
                                         </button>
                                     </div>
 
 
-                                    <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5" role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
+                                    <div ref={pannel} className="hidden" role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
                                         <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Your Profile</Link>
                                         {/* Protected link => only accessible by admin */}
                                         {/* {isAdmin() && <Link to="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Settings</Link>} */}
