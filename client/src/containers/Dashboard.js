@@ -35,7 +35,6 @@ const Dashboard = () => {
     useEffect(() => {
         axios.get('/cryptos')
             .then(response => {
-                console.log(response.data);
                 setData(response.data);
             })
             .catch(error => {
@@ -52,7 +51,7 @@ const Dashboard = () => {
     }
 
     if (isAuth)
-        filters = [['allowed', '=', true], ['myCrypto', '=', false]];
+        filters = [['allowed', '=', true], ['myCrypto', '=', true]];
     else
         filters = ['allowed', '=', true];
 

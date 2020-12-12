@@ -26,3 +26,16 @@ export const getUnAllowedCryptos = () => {
             });
     })
 }
+
+export const getUserCryptos = () => {
+    return new Promise((resolve, reject) => {
+        axios.get('/cryptos')
+            .then(response => {
+                let userCryptos = response.data.filter(crypto => {
+                    return crypto.myCrypto;
+                })
+
+                resolve(userCryptos);
+            });
+    })
+}

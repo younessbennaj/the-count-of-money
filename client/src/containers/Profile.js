@@ -9,11 +9,11 @@ import ProfileForm from '../components/ProfileForm';
 import { useAuthContext } from "../hooks/use-auth";
 
 function reducer(state, action) {
-    let { cryptocurrencies, tags, username, currency, value } = action.payload;
+    let { cryptocurrencies, tags, username, currency, value, mail } = action.payload;
     switch (action.type) {
         //We initlialize our reducer with the value fetched from the user profile
         case 'INITIALIZE':
-            return { ...state, cryptocurrencies, tags, username, currency };
+            return { ...state, cryptocurrencies, tags, username, currency, mail };
         case 'ADD_CRYPTOS':
             //Add the value in the cryptocurrencies list
             return { ...state, cryptocurrencies: [...state.cryptocurrencies, value] };
@@ -54,9 +54,10 @@ const Profile = () => {
                     console.log(response.data);
 
                     //Format the response data
-                    const { nickname: username, listWeb: tags, listCrypto: cryptocurrencies, currencies: currency } = response.data;
+                    const { mail, nickname: username, listWeb: tags, listCrypto: cryptocurrencies, currencies: currency } = response.data;
 
                     const payload = {
+                        mail,
                         username,
                         tags,
                         cryptocurrencies,
@@ -79,6 +80,7 @@ const Profile = () => {
             {!isEditMode ?
                 <ProfileCard
                     credentials={state}
+                    isEditMode={isEditMode}
                     setIsEditMode={setIsEditMode}
                 />
                 :

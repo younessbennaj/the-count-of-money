@@ -118,22 +118,20 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
 
         console.log(userCredentials);
 
-        var data = JSON.stringify(userCredentials);
+        // var data = JSON.stringify(userCredentials);
 
-        // axios.put('/users/profile', data) 
-        //     .then(response => {
-        //         //Leave the edit mode and return to the profile card
-        //         setIsEditMode(false)
-        //     })
+        axios.put('/users/profile', userCredentials) 
+            .then(response => {
+                //Leave the edit mode and return to the profile card
+                setIsEditMode(false)
+            })
     }
 
     //utils
     function isUserPreferences(value, preferences) {
     
-        console.log(!!preferences.find(preference => preference === value.id));
         //Check if the value is in the user preferences
         return !!preferences.find(preference => preference === value.id);
-        // return true;
     }
 
     return (
@@ -190,6 +188,7 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
                                 <UIChips 
                                     key={crypto.id} 
                                     item={crypto.name}  
+                                    value={crypto.id}
                                     //True, if the crypto value from the admin selection is in the user preferences
                                     defaultChecked={isUserPreferences(crypto, credentials.cryptocurrencies)}
                                 />
