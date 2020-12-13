@@ -9,9 +9,11 @@ function useProvideAuth() {
     const [user, setUser] = useState(null);
 
     const signin = (credentials, type, cb) => {
+        console.log('signin');
         return authenticateUser(credentials, type, () => {
             //the user is successfuly logged in
             getUserCredentials(credentials => {
+                if (credentials.right) sessionStorage.setItem('is-admin', true);
                 //we get the user credentials
                 setUser(credentials);
                 //Task to accomplish when the user is logged and we get his credentials
@@ -21,6 +23,13 @@ function useProvideAuth() {
         });
     };
 
+    const getUser = () => {
+        getUserCredentials(credentials => {
+            //we get the user credentials
+            setUser(credentials);
+        })
+    }
+
     const signout = (cb) => {
         logoutUser().then(() => {
             setUser(null);
@@ -29,23 +38,21 @@ function useProvideAuth() {
         });
     }
 
-    const getUser = () => {
-        getUserCredentials(credentials => {
-            console.log(credentials);
-            // //we get the user credentials
-            setUser(credentials);
-        })
-    }
-
     const isAuth = () => {
         //return a boolean to check if the user is logged in
         return !!sessionStorage.getItem('jwt');
     }
 
+    const isAdmin = () => {
+        //return a boolean to check if the user is admin
+        return sessionStorage.getItem('is-admin');
+    }
 
     return {
         user,
+        setUser,
         isAuth,
+        isAdmin,
         signin,
         signout,
         getUser

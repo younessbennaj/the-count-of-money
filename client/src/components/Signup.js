@@ -1,4 +1,4 @@
-//React Router 
+//React Router
 import {
     useRouteMatch
 } from "react-router-dom";
@@ -6,7 +6,7 @@ import {
 //Formik
 import { Formik, Form, Field } from 'formik';
 
-//Import components 
+//Import components
 import ErrorMessage from "./ErrorMessage";
 
 //Utils

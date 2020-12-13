@@ -1,4 +1,4 @@
-FROM node:10
+FROM node:12
 
 # Create app directory => container has is own file system virtualized from the OS host
 WORKDIR /usr/src/app/client

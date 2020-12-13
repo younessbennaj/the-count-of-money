@@ -1,35 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import UIChips from "./UIChips";
 import axios from 'axios';
 
-const UIChips = ({item, defaultChecked}) => {
-    return (
-        <label htmlFor={item} className="chips">
-            <input 
-                type="checkbox"
-                id={item}
-                name={item}
-                value={item}
-                defaultChecked={defaultChecked}
-                className="hidden"
-            />
-            {/* <span>Hello</span> */}
-            <span className="
-                bg-blue-200
-                text-blue-700
-                rounded-full
-                py-1
-                px-4 
-                inline-block
-                sibling-checked:text-gray-50
-                mr-3
-                my-2
-                "
-             >
-                {item}
-            </span>
-        </label>
-    )
-}
+//Utils
+import { getAllowedCryptos, getUnAllowedCryptos } from "../utils/cryptos";
+
 
 const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
 
@@ -78,10 +53,18 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
     // *** LOCAL STATE ***
 
     //Options of crytos that the user can add to his preferences 
-    const [cryptosOptions] = useState(cryptosMock);
+    const [cryptosOptions, setCryptosOptions] = useState([]);
 
     //Options of news tags that the user can add to his preferences 
-    const [tagsOptions] = useState(tagsMock);
+    const [tagsOptions, setTagsOptions] = useState([]);
+
+    // SIDE EFFECT CODE HERE
+    useEffect(() => {
+        getAllowedCryptos().then(allowed => {
+            setCryptosOptions(allowed);
+            setTagsOptions(allowed)
+        })
+    }, []);
 
     // *** Event handlers *** 
 
@@ -125,17 +108,29 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
     function handleFormSubmit(e) {
         e.preventDefault();
 
+        //Filter to know if a new tags is allowed or not
+        function isAllowed(tag, allowedCryptos) {
+            let founded = tagsOptions.find(opt => {
+                return opt.id === tag;
+            })
+
+            return !!founded;
+        }
+
+        //We can only add the allowed crypto as news tags
+        const tags = credentials.tags.filter(tag => {
+            return isAllowed(tag, tagsOptions)
+        })
+
         const userCredentials = {
             mail: credentials.mail,
             nickname: credentials.username,
             currencies: credentials.currency,
             listCrypto: credentials.cryptocurrencies,
-            listWeb: credentials.tags
+            listWeb: tags
         }
 
-        var data = JSON.stringify(userCredentials);
-
-        axios.put('/users/profile', data) 
+        axios.put('/users/profile', userCredentials) 
             .then(response => {
                 //Leave the edit mode and return to the profile card
                 setIsEditMode(false)
@@ -144,9 +139,9 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
 
     //utils
     function isUserPreferences(value, preferences) {
+    
         //Check if the value is in the user preferences
-        return !!preferences.find(preference => preference === value);
-        // return true;
+        return !!preferences.find(preference => preference === value.id);
     }
 
     return (
@@ -201,8 +196,10 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
                         {cryptosOptions.map(crypto => {
                             return (
                                 <UIChips 
-                                    key={crypto} 
-                                    item={crypto}  
+                                    key={crypto.id} 
+                                    name={crypto.name}  
+                                    value={crypto.id}
+                                    id={`${crypto.id}-cryptos`}
                                     //True, if the crypto value from the admin selection is in the user preferences
                                     defaultChecked={isUserPreferences(crypto, credentials.cryptocurrencies)}
                                 />
@@ -212,13 +209,15 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
                     </fieldset>
                     <fieldset onChange={e => handleTagChange(e)} className="my-4">
                         <legend className="block text-sm font-medium text-gray-700 pl-1 pb-1">Select a tag</legend>
-                        {tagsOptions.map(tag => {
+                        {tagsOptions.map(crypto => {
                             return (
-                                <UIChips 
-                                    key={tag} 
-                                    item={tag}  
+                                <UIChips
+                                    key={crypto.id} 
+                                    name={crypto.name}
+                                    id={`${crypto.id}-tags`}
+                                    value={crypto.id}
                                     //True, if the tag value from the admin selection is in the user preferences
-                                    defaultChecked={isUserPreferences(tag, credentials.tags)}
+                                    defaultChecked={isUserPreferences(crypto, credentials.tags)}
                                 />
                             )
                         })}

@@ -12,7 +12,6 @@ import App from './App';
 //Auth Hook
 import { AuthContextProvider } from "./hooks/use-auth";
 
-
 //If you want to work with the Mock API
 if (process.env.REACT_APP_API_CONFIG === 'development') {
   console.log('You work with the developement API using mock data (fake)');

@@ -5,14 +5,15 @@ import axios from "axios";
 import {
   BrowserRouter as Router,
   Switch,
-  Route
+  Route,
+  useHistory
 } from "react-router-dom";
 
 //Layout HOC
 import { withLayout } from "./hoc/Layout";
 
 //Protected Route HOC
-import { PrivateRoute } from "./hoc/PrivateRoute";
+import { PrivateRoute, AdminRoute } from "./hoc/PrivateRoute";
 
 //Import containers 
 import Dashboard from "./containers/Dashboard";
@@ -21,12 +22,15 @@ import News from "./containers/News";
 import Article from "./containers/Article";
 import Authentication from "./containers/Authentication";
 import Profile from "./containers/Profile";
+import Settings from "./containers/Settings";
 
 //Import components
 import Navbar from "./components/Navbar";
 
 //Auth Hook
 import { useAuthContext } from "./hooks/use-auth";
+
+// const auth = useAuthContext();
 
 function App() {
 
@@ -40,8 +44,9 @@ function App() {
 
   const ProfileWithLayout = withLayout(Profile);
 
+  const SettingsWithLayout = withLayout(Settings);
 
-  const { getUser, isAuth } = useAuthContext();
+  const { getUser, isAuth, signout } = useAuthContext();
 
   //We get user credentials when we mount the page if the user is already logged
   //e.g: When we refresh the page 
@@ -88,6 +93,11 @@ function App() {
           <PrivateRoute path="/profile" exact>
             <ProfileWithLayout title="Profile" />
           </PrivateRoute>
+
+          {/* Profile Route */}
+          <AdminRoute path="/settings" exact>
+            <SettingsWithLayout title="Settings" />
+          </AdminRoute>
         </Switch>
       </div>
     </Router>
