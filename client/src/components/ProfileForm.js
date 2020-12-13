@@ -3,7 +3,7 @@ import UIChips from "./UIChips";
 import axios from 'axios';
 
 //Utils
-import { getAllowedCryptos, getUnAllowedCryptos } from "../utils/cryptos";
+import { getAllowedCryptos } from "../utils/cryptos";
 
 
 const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
@@ -16,32 +16,6 @@ const ProfileForm = ({ credentials, dispatch, setIsEditMode }) => {
         setIsEditMode => method to update the UI state that handle normal/edit switch mode of the profile
     
     */
-
-    // *** MOCK API DATA ***
-
-    //Mock Data model of Cryptos added by the administrator 
-    const cryptosMock = [
-        "Bitcoin",
-        "Ethereum",
-        "XRP",
-        "Tether",
-        "BitcoinCash",
-        "Chainlink",
-        "Litecoin",
-        "Cardano",
-        "Polkadot",
-        "BinanceCoin"
-    ];
-
-    //Mock Data model of Tags added by the administrator
-    const tagsMock = [
-        "blockchain",
-        "crypto",
-        "cryptocurrency",
-        "ethereum",
-        "bitcoin",
-        "cryptotrading"
-    ]
 
     //Mock data model of avaible currencies 
     const currenciesMock = [

@@ -1,6 +1,5 @@
 //Autocomplete component to find a crypto currency 
 import React, { useState, useEffect, useReducer } from 'react';
-import axios from "axios";
 
 //State de l'autocomplete
 function reducer(state, action) {
@@ -9,13 +8,8 @@ function reducer(state, action) {
             return { ...state, cryptos: action.payload };
         case "SET_CRYPTOS":
             return { ...state, cryptos: action.payload };
-            // return {...state, cryptos: [...action.payload]}
-            return state;
         case "REMOVE_CRYPTO":
             return { ...state, cryptos: [...state.cryptos].filter(c => c.id !== action.payload.id) };
-        case "ADD_CRYPTO":
-            console.log('ADD_CRYPTO');
-            return state;
         default:
             return state;
     }

@@ -97,9 +97,7 @@ const Navbar = () => {
 
                                     <div ref={pannel} className="hidden" role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
                                         <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Your Profile</Link>
-                                        {/* Protected link => only accessible by admin */}
-                                        {/* {isAdmin() && <Link to="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Settings</Link>} */}
-                                        <Link to="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Settings</Link>
+                                        {isAdmin() && <Link to="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Settings</Link>}
                                         <a onClick={(e) => logout(e)} href="/#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Sign out</a>
                                     </div>
                                 </div>

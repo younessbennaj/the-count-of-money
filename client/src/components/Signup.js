@@ -1,6 +1,8 @@
 //React Router
 import {
-    useRouteMatch
+    useRouteMatch,
+    useLocation,
+    useHistory
 } from "react-router-dom";
 
 //Formik
@@ -9,13 +11,31 @@ import { Formik, Form, Field } from 'formik';
 //Import components
 import ErrorMessage from "./ErrorMessage";
 
+//Hook to handle user authentification
+import { useAuthContext } from "../hooks/use-auth";
+
 //Utils
-import { authenticateUser } from "../utils/auth";
 import { AuthenticationSchema } from "../utils/schemas";
+
+function useQuery() {
+    return new URLSearchParams(useLocation().search);
+}
 
 const Signup = () => {
 
+    let history = useHistory();
+
     let { path } = useRouteMatch();
+
+    let query = useQuery();
+
+    // Auth Hook => get the signin method to authenticate the user
+    const { signin } = useAuthContext();
+
+    if (query.get('token')) {
+        sessionStorage.setItem('jwt', query.get('token'));
+        history.push("/");
+    }
 
     return (
         <div className="max-w-md w-full space-y-8">
@@ -28,7 +48,10 @@ const Signup = () => {
                 validationSchema={AuthenticationSchema}
                 onSubmit={credentials => {
                     //In authencateUser we need to specify if it's a registration or the user just want to signin
-                    authenticateUser(credentials, 'register');
+                    signin(credentials, 'register', () => {
+                        //Redirect to the home page when user is logged in
+                        history.push("/authentication/login");
+                    });
                 }}
             >
                 {({ errors, touched }) => (
@@ -62,6 +85,13 @@ const Signup = () => {
                     </Form>
                 )}
             </Formik>
+            <div>
+                <h2 className="my-2 py-3 text-center text-sm font-extrabold text-gray-400">Or continue with these social profile</h2>
+                <div className="flex flex-row justify-around">
+                    <button className="py-2 px-4 rounded-md text-indigo-600 text-lg border border-indigo-600 bg-transparent shadow-sm mr-2"><a href="http://localhost:5000/users/auth/google">Signup with Google</a></button>
+                    <button className="py-2 px-4 rounded-md text-indigo-600 text-lg border border-indigo-600 bg-transparent shadow-sm mr-2"><a href="http://localhost:5000/users/auth/facebook">Signup with Facebook</a></button>
+                </div>
+            </div>
         </div>
     );
 }
