@@ -5,8 +5,6 @@ import {
     useLocation
 } from "react-router-dom";
 
-import axios from "axios";
-
 //Formik
 import { Formik, Form, Field } from 'formik';
 

@@ -22,7 +22,6 @@ const Settings = () => {
 
         axios.post('/cryptos', data)
             .then(response => {
-                console.log(response.data);
                 history.push('/');
             })
 
