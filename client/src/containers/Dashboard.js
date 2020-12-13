@@ -35,6 +35,8 @@ const Dashboard = () => {
     useEffect(() => {
         axios.get('/cryptos')
             .then(response => {
+                console.log("Cryptos :");
+                console.log(response.data);
                 setData(response.data);
             })
             .catch(error => {
@@ -60,6 +62,7 @@ const Dashboard = () => {
             <div>
                 <DataGrid
                     id="gridContainer"
+                    noDataText="Go to your profile and select your cryptocurrencies preferences"
                     dataSource={data}
                     filterSyncEnabled={true}
                     defaultFilterValue={filters}

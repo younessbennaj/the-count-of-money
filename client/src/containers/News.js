@@ -19,6 +19,7 @@ const News = () => {
         //With MSWJS actived
         axios.get('/articles')
         .then(response => {
+            console.log(response.data);
             setData(response.data);
         })
     }, []);
