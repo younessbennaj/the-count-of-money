@@ -5,8 +5,8 @@ export const authenticateUser = ({ email: mail, password }, type, cb) => {
     //We re-use the same logic for register and login route authentication
     //So, instead of two separated method, I use one with a "type" parameters 
     //"type" can be "register" or "login", and we use this variable in a dyamic string that describes the route
-
     const data = JSON.stringify({ mail, password });
+
 
     var config = {
         method: 'post',
@@ -20,10 +20,12 @@ export const authenticateUser = ({ email: mail, password }, type, cb) => {
 
     axios(config)
         .then(function (response) {
-            //We store the JWT sent by the server
-            sessionStorage.setItem('jwt', response.data.jwt);
-            //set axios request header with the token
-            axios.defaults.headers.common['jwt'] = sessionStorage.getItem('jwt');
+            if (type === 'login') {
+                //We store the JWT sent by the server
+                sessionStorage.setItem('jwt', response.data.jwt);
+                //set axios request header with the token
+                axios.defaults.headers.common['jwt'] = sessionStorage.getItem('jwt');
+            }
             //Call the callback function when the user is successfuly logged in
             cb();
         })

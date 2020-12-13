@@ -1,7 +1,8 @@
 //React Router
 import {
     useHistory,
-    useRouteMatch
+    useRouteMatch,
+    useLocation
 } from "react-router-dom";
 
 import axios from "axios";
@@ -18,31 +19,24 @@ import ErrorMessage from "./ErrorMessage";
 //Utils
 import { AuthenticationSchema } from "../utils/schemas";
 
+function useQuery() {
+    return new URLSearchParams(useLocation().search);
+}
+
 const Login = () => {
 
     let history = useHistory();
 
     let { path } = useRouteMatch();
 
+    let query = useQuery();
+
     // Auth Hook => get the signin method to authenticate the user
     const { signin } = useAuthContext();
 
-    function handleGoogleLogin() {
-
-        var config = {
-            method: 'get',
-            url: '/users/auth/google',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        };
-
-        console.log(config);
-
-        axios(config)
-            .then(response => {
-                console.log(response.data);
-            })
+    if (query.get('token')) {
+        sessionStorage.setItem('jwt', query.get('token'));
+        history.push("/");
     }
 
     return (
@@ -94,7 +88,13 @@ const Login = () => {
                     </Form>
                 )}
             </Formik>
-            <button onClick={handleGoogleLogin}>Google</button>
+            <div>
+                <h2 className="my-2 py-3 text-center text-sm font-extrabold text-gray-400">Or continue with these social profile</h2>
+                <div className="flex flex-row justify-around">
+                    <button className="py-2 px-4 rounded-md text-indigo-600 text-lg border border-indigo-600 bg-transparent shadow-sm mr-2"><a href="http://localhost:5000/users/auth/google">Login with Google</a></button>
+                    <button className="py-2 px-4 rounded-md text-indigo-600 text-lg border border-indigo-600 bg-transparent shadow-sm mr-2"><a href="http://localhost:5000/users/auth/facebook">Login with Facebook</a></button>
+                </div>
+            </div>
         </div>
     );
 }

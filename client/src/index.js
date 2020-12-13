@@ -23,7 +23,7 @@ if (process.env.REACT_APP_API_CONFIG === 'development') {
   //Instead, work with the real one
 
   //We set the baseURL of our API
-  axios.defaults.baseURL = 'http://localhost:5000'
+  axios.defaults.baseURL = 'http://localhost:5000/'
 }
 
 ReactDOM.render(
