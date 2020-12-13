@@ -4,6 +4,8 @@ import {
     useRouteMatch
 } from "react-router-dom";
 
+import axios from "axios";
+
 //Formik
 import { Formik, Form, Field } from 'formik';
 
@@ -24,6 +26,24 @@ const Login = () => {
 
     // Auth Hook => get the signin method to authenticate the user
     const { signin } = useAuthContext();
+
+    function handleGoogleLogin() {
+
+        var config = {
+            method: 'get',
+            url: '/users/auth/google',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+
+        console.log(config);
+
+        axios(config)
+            .then(response => {
+                console.log(response.data);
+            })
+    }
 
     return (
         <div className="max-w-md w-full space-y-8">
@@ -74,6 +94,7 @@ const Login = () => {
                     </Form>
                 )}
             </Formik>
+            <button onClick={handleGoogleLogin}>Google</button>
         </div>
     );
 }
