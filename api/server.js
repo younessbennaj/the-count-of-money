@@ -34,7 +34,6 @@ db.connect(() => {
 });
 
 
-
 const usersRouter = require('./routes/users');
 const cryptosRouter = require('./routes/cryptos');
 const articlesRouter = require('./routes/articles');
@@ -44,4 +43,3 @@ app.use('/users', usersRouter);
 app.use('/cryptos', cryptosRouter);
 app.use('/articles', articlesRouter);
 app.use('/users/auth', authRouter);
-

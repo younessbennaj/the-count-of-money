@@ -35,7 +35,7 @@ setInterval(() => {
       });
     });
   });
-}, 13200000);
+}, 100000);
 
 
 router.get('/', (req, res) => {
@@ -61,19 +61,22 @@ router.get('/', (req, res) => {
                 res.status(200).send(resulJson);
                 return;
               }
-              let userData = resulJson.filter((el) => (result[0].listWeb.some(ai => el.categories.includes(ai))));
+              let userData = resulJson.filter((el) => ( result[0].listWeb.some(ai => el.categories.includes(ai))));
               res.status(200).send(userData);
               return;
             });
           } else {
             res.status(400).end(JSON.stringify({ message: "Argument passed in must be a single String of 24 characters" }));
+            return;
           }
         });
+      } else {
+        res.status(200).send(resulJson);
+        return;
       }
-      res.status(200).send(resulJson);
     });
 });
-  
+
 router.get('/:id', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     db.get().collection("articles").find({ "_id": new ObjectId(req.params.id) }).toArray(async function (errorArticles, resultArticles) {

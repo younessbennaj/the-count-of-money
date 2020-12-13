@@ -71,13 +71,13 @@ router.post('/', (req, res) => {
           return;
         }
         if (decoded.userId.length === 24) {
-          db.get().collection("users").find({ "_id": new ObjectId(decoded.userId) }).toArray(function (error, result) {
+          db.get().collection("users").find({ "_id": new ObjectId(decoded.userId) }).toArray(async function (error, result) {
             if (result.length === 0) {
               res.status(400).end(JSON.stringify({ message: "User not found" }));
             }
             if (result[0].right == 1) {
-              db.get().collection("adminCryptos").deleteMany();
-              db.get().collection("adminCryptos").insertMany(req.body, function (errs, ress) {
+              await db.get().collection("adminCryptos").deleteMany();
+              await db.get().collection("adminCryptos").insertMany(req.body, function (errs, ress) {
                 if (errs) throw errs;
                 res.status(200).end(JSON.stringify({ message: "List of crypto update" }));
               });
