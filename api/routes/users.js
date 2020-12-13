@@ -206,4 +206,66 @@ router.delete('/delete', (req, res) => {
   }
 });
 
+router.get('/listUsers', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  if (req.headers.hasOwnProperty('jwt')) {
+    jwt.verify(req.headers.jwt, 'RANDOM_TOKEN_SECRET', function (err, decoded) {
+      if (err) {
+        res.status(400).end(JSON.stringify({ message: "Token expired" }));
+        return;
+      }
+      if (decoded.userId.length === 24) {
+        db.get().collection("users").find({ "_id": new ObjectId(decoded.userId) }).toArray(function (error, result) {
+          if (error) throw error;
+          if (result[0].right == 1) {
+            db.get().collection("users").find().toArray(async function (error1, result1) {
+              const listUsers = await result1.filter((el) => el.right == 0);
+              const resulJson = await listUsers.map(({ mail }) => ({ mail }));
+              res.status(200).end(JSON.stringify(resulJson));
+              return;
+            });
+          } else {
+            res.status(400).end(JSON.stringify({ message: "Your are not admin" }));
+            return;
+          }
+        });
+      } else {
+        res.status(400).end(JSON.stringify({ message: "Wrong JWT" }));
+      }
+    });
+  } else {
+    res.status(400).end(JSON.stringify({ message: "Invalid request" }));
+  }
+});
+
+
+router.put('/addAdmin', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  if (req.headers.hasOwnProperty('jwt')) {
+    jwt.verify(req.headers.jwt, 'RANDOM_TOKEN_SECRET', function (err, decoded) {
+      if (err) {
+        res.status(400).end(JSON.stringify({ message: "Token expired" }));
+        return;
+      }
+      if (decoded.userId.length === 24) {
+        db.get().collection("users").find({ "_id": new ObjectId(decoded.userId) }).toArray(async function (error, result) {
+          if (error) throw error;
+          if (result[0].right == 1) {
+            await req.body.forEach(users => db.get().collection("users").updateOne({ "mail": users.mail}, { $set :{right: 1}}));
+            res.status(200).end(JSON.stringify({ message: "Admin Updated" }));
+          } else {
+            res.status(400).end(JSON.stringify({ message: "Your are not admin" }));
+            return;
+          }
+        });
+      } else {
+        res.status(400).end(JSON.stringify({ message: "Wrong JWT" }));
+      }
+    });
+  } else {
+    res.status(400).end(JSON.stringify({ message: "Invalid request" }));
+  }
+});
+
+
 module.exports = router
