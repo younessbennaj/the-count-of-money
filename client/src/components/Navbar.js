@@ -172,6 +172,12 @@ const Navbar = () => {
                     {isAuth() && <li onClick={handleToggleMenu}><Link to="/profile" className="pl-6 py-3 inline-block" >Profile</Link></li>}
                     {isAdmin() && <li onClick={handleToggleMenu}><Link to="/settings" className="pl-6 py-3 inline-block" >Settings</Link></li>}
                     {!isAuth() && <li onClick={handleToggleMenu}><Link to="/authentication/login" className="pl-6 py-3 inline-block" >Login</Link></li>}
+                    {isAuth() && <li
+                        onClick={(e) => {
+                            handleToggleMenu();
+                            logout(e);
+                        }}>
+                        <Link to="/profile" className="pl-6 py-3 inline-block" >Sign out</Link></li>}
                 </ul>
             </div>
         </nav>
