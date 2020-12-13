@@ -1,10 +1,10 @@
-const UIChips = ({item, value, defaultChecked}) => {
+const UIChips = ({name, value, id, defaultChecked}) => {
     return (
-        <label htmlFor={item} className="chips">
+        <label htmlFor={id} className="chips">
             <input 
                 type="checkbox"
-                id={item}
-                name={item}
+                id={id}
+                name={name}
                 value={value}
                 defaultChecked={defaultChecked}
                 className="hidden"
@@ -22,7 +22,7 @@ const UIChips = ({item, value, defaultChecked}) => {
                 my-2
                 "
              >
-                {item}
+                {name}
             </span>
         </label>
     )
